@@ -1,0 +1,8 @@
+Customers name: test
+Customer surname: user
+Customer Final Bill: R80
+
+Customers name: brandan-lee
+Customer surname: sherbrooke
+Customer Final Bill: R173.7
+
