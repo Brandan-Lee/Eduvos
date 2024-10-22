@@ -16,7 +16,7 @@ int main() {
     for (int i = 0; i < numStudents; i++) {
         cout << "Enter score for student " << i + 1 << ": ";
         cin >> score;
-        //compare score to be either the lowest or highest score
+        //Find the highest score
         if (score > highestScore) {
             highestScore = score;
         }
