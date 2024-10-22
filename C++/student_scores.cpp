@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 //This program receives input from the user regarding the students scores. It calculates the average score of the class, finds the highest and lowest scores of the students and displays all the students scores at the end as well as the highest, lowest and average score of the class
@@ -42,9 +43,9 @@ int main() {
             lowestScore = studentScores[i];
         }
     }
-    //display the average score, highest score, and lowest score of the class
+    //display the average score and round it to 2 decimal places, highest score, and lowest score of the class
     cout << "\n";
-    cout << "Average score: " << avgScore << ".00\n";
+    cout << "Average score: " << fixed << setprecision(2) << avgScore << endl;
     cout << "Highest score: " << highestScore << endl;
     cout << "Lowest score: " << lowestScore << endl;
     //Display to the user that the program is finished and has exited
