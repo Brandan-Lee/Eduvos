@@ -7,7 +7,7 @@ int main() {
     //Declaration variables
     double avgScore, totalScore;
     int numStudents = 5;
-    int highestScore, score;
+    int highestScore, score, studentScoresLength;
     //Declaration of array
     double studentScores[numStudents];
     //Display to the user to enter the score of the students
@@ -24,11 +24,13 @@ int main() {
         totalScore += score;
         //Add the score to the array
         studentScores[i] = score;
-    } 
+    }
+    //Find the length of the student scores array
+    studentScoresLength = sizeof(studentScores) / sizeof(studentScores[0]);
     //Display the scores of the students to the user
     cout << "\n";
     cout << "Scores entered: \n";
-    for (int i = 0; i < numStudents; i++) {
+    for (int i = 0; i < studentScoresLength; i++) {
         cout << "Student " << i + 1 << ": " << studentScores[i] << endl;
     }
     //calculate the average score of the class
