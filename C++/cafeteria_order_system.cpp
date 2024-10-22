@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 
 //This program receives input from the user, displays a cafeteria menu, calculates a total bill and applies a discount if applicable. The customers total bill and details will be written to a textfile
@@ -84,7 +85,7 @@ int main() {
         cout << "No discount applied.\n";
     }
     //Display the final bill to the user
-    cout << "Final Bill: R" << totalBill << ".00\n";
+    cout << "Final Bill: R" << fixed << setprecision(2) << totalBill << endl;
     //Textfile operations
     ofile.open(txtFile, ios::app);
     //Check to see if the file opened correctly, if not display an error message
@@ -92,7 +93,7 @@ int main() {
         //Write the customers name, surname and final bill to the text file
         ofile << "Customers name: " << name << endl;
         ofile << "Customer surname: " << surname << endl;
-        ofile << "Customer Final Bill: R" << totalBill << endl;
+        ofile << "Customer Final Bill: R" << fixed << setprecision(2) << totalBill << endl;
         ofile << "\n";
         //Close the textfile and display to the user that the bill has been written to the text file
         ofile.close();
