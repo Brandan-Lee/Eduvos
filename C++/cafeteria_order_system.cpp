@@ -24,6 +24,7 @@ int main() {
     const double PIZZA_PRICE = 35.00;
     const double SOUP_PRICE = 18.00;
     const double BURGER_PRICE = 40.00;
+
     //Prompt the user to enter their name, surname and the number of items that they would like to order
     cout << "Enter your name: ";
     cin >> name;
@@ -43,6 +44,7 @@ int main() {
     cout << "7. Soup - R" << SOUP_PRICE << ".00\n";
     cout << "8. Burger - R" << BURGER_PRICE << ".00\n";
     cout << "\n";
+
     //Ask the user to select their item and add it to the total bill with input validation
     for (int i = 1; i <= numItems; i++) {
         cout << "Select item " << i << " (1-8): ";
@@ -78,14 +80,17 @@ int main() {
                 i--;
         }
     }
+
     //Calculate if the user will receive a discount or not
     if (totalBill > DISCOUNT_THRESHOLD) {
         totalBill = totalBill - (totalBill * DISCOUNT_RATE);
     } else {
         cout << "No discount applied.\n";
     }
+
     //Display the final bill to the user
     cout << "Final Bill: R" << fixed << setprecision(2) << totalBill << endl;
+
     //Textfile operations
     ofile.open(txtFile, ios::app);
     //Check to see if the file opened correctly, if not display an error message
@@ -102,6 +107,7 @@ int main() {
         cout << "There was an error opening this file.";
         return 1;
     }
+    
     //close the application.
     return 0;
 }
