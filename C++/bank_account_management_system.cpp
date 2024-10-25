@@ -3,7 +3,14 @@
 #include <iomanip>
 using namespace std;
 
-//this is a bank account management system. The account uses 3 functions, namely creating an account with the bank, depositing, and withdrawing money from their bank account, as well as checking their account balance and to display their account details to the console
+//this is a bank account management system. The account uses 5 functions, namely creating an account with the bank, depositing, and withdrawing money from their bank account, as well as checking their account balance and to display their account details to the console
+
+//function declarations
+void createAccount(string &name, int &accountNumber, double &balance);
+double depositMoney(double &balance);
+double withdrawMoney(double &balance);
+void CheckBalance(const double &balance);
+void displayAccountDetails(string &name, int &accountNumber, const double &balance);
 
 //This function allows the user to create an account with the bank
 void createAccount(string &name, int &accountNumber, double &balance) {
@@ -30,7 +37,7 @@ void createAccount(string &name, int &accountNumber, double &balance) {
 }
 
 //This function allows the user to deposit money into their bank account
-double DepositMoney(double &balance) {
+double depositMoney(double &balance) {
     double depositAmount;
     cout << "\n--- Deposit money into Account ---\n";
     
@@ -110,7 +117,7 @@ int main() {
                 createAccount(accName, accNumber, accBalance);
                 break;
             case 2:
-                accBalance = DepositMoney(accBalance);
+                accBalance = depositMoney(accBalance);
                 break;
             case 3:
                 accBalance = withdrawMoney(accBalance);
