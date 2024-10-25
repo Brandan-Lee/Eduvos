@@ -47,6 +47,8 @@ double DepositMoney(double &balance) {
             cout << "Invalid input. The deposit must be greater than 0. Please try again.\n";
         }
     }
+
+    return balance;
 }
 
 double withdrawMoney(double &balance) {
