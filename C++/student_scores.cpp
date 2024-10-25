@@ -13,36 +13,44 @@ int main() {
     double studentScores[numStudents];
     //Display to the user to enter the score of the students
     cout << "Enter the score for " << numStudents << " students: \n";
+
     //Ask the user to add the scores of the number of students
     for (int i = 0; i < numStudents; i++) {
         cout << "Enter score for student " << i + 1 << ": ";
         cin >> score;
+
         //Find the highest score
         if (score > highestScore) {
             highestScore = score;
         }
+
         //Add the score to the total score of the class
         totalScore += score;
         //Add the score to the array
         studentScores[i] = score;
     }
+
     //Find the length of the student scores array
     studentScoresLength = sizeof(studentScores) / sizeof(studentScores[0]);
     //Display the scores of the students to the user
     cout << "\n";
     cout << "Scores entered: \n";
+
     for (int i = 0; i < studentScoresLength; i++) {
         cout << "Student " << i + 1 << ": " << studentScores[i] << endl;
     }
+
     //calculate the average score of the class
     avgScore = totalScore / numStudents;
     //find the lowest score in the arrray
     int lowestScore = studentScores[0];
+
     for (int i = 0; i < numStudents; i++) {
         if (studentScores[i] < lowestScore) {
             lowestScore = studentScores[i];
         }
     }
+    
     //display the average score and round it to 2 decimal places, highest score, and lowest score of the class
     cout << "\n";
     cout << "Average score: " << fixed << setprecision(2) << avgScore << endl;
