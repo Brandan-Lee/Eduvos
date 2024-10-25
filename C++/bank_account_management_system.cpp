@@ -15,37 +15,38 @@ void createAccount(string &name, int &accountNumber, double &balance) {
     cin >> accountNumber;
 
     //Display to the user atleast once that they have to enter a deposit. input validation to ensure that the user enters a deposit that is greater than 0
-    do {
+    while (true) {
         cout << "Enter your initial deposit (must be greater than 0) R";
         cin >> balance;
 
         if (balance > 0) {
             cout << "Account created successfully!\n\n";
+            break;
         } 
         else {
             cout << "Invalid input. The deposit must be greater than 0. Please try again.\n";
         }
-    } while (balance <= 0);
+    }
 }
 
 //This function allows the user to deposit money into their bank account
 double DepositMoney(double &balance) {
     double depositAmount;
     cout << "\n--- Deposit money into Account ---\n";
+    
     //Show to the user atleast once that they should deposit money into their bank account
-    do {
+    while (true) {
         cout << "Please enter the amount of funds that you want to deposit (greater than 0): ";
         cin >> depositAmount;
 
         if (depositAmount > 0) {
             balance += depositAmount;
             cout << "Deposit has been successful!\n\n";
+            break;
         } else {
             cout << "Invalid input. The deposit must be greater than 0. Please try again.\n";
         }
-    } while (depositAmount <= 0);
-
-    return balance;
+    }
 }
 
 double withdrawMoney(double &balance) {
@@ -53,7 +54,7 @@ double withdrawMoney(double &balance) {
     cout << "\n--- Withdraw Money from Account ---\n";
 
     //Show to the user atleast once that they should deposit money into their bank account
-    do {
+    while (true) {
         cout << "Please enter the amount of funds to withdraw from your account: ";
         cin >> withdrawAmount;
         
@@ -65,8 +66,9 @@ double withdrawMoney(double &balance) {
         } else {
             balance -= withdrawAmount;
             cout << "The funds have been withdrawn from your account:\n\n";
+            break;
         }
-    } while (withdrawAmount > balance || withdrawAmount <= 0);
+    }
 
     return balance;
 }
