@@ -5,51 +5,48 @@ using namespace std;
 //This program receives input from the user regarding the students scores. It calculates the average score of the class, finds the highest and lowest scores of the students and displays all the students scores at the end as well as the highest, lowest and average score of the class
 
 int main() {
+    //Declaration of array
+    const int numStudents = 5;
+    double studentScores[numStudents];
     //Declaration variables
     double avgScore, totalScore;
-    int numStudents = 5;
-    int highestScore, score, studentScoresLength;
-    //Declaration of array
-    double studentScores[numStudents];
+    int highestScore;
+
     //Display to the user to enter the score of the students
     cout << "Enter the score for " << numStudents << " students: \n";
 
     //Ask the user to add the scores of the number of students
     for (int i = 0; i < numStudents; i++) {
         cout << "Enter score for student " << i + 1 << ": ";
-        cin >> score;
+        cin >> studentScores[i];
 
         //Find the highest score
-        if (score > highestScore) {
-            highestScore = score;
+        if (studentScores[i] > highestScore) {
+            highestScore = studentScores[i];
         }
 
         //Add the score to the total score of the class
-        totalScore += score;
-        //Add the score to the array
-        studentScores[i] = score;
+        totalScore += studentScores[i];
     }
 
-    //Find the length of the student scores array
-    studentScoresLength = sizeof(studentScores) / sizeof(studentScores[0]);
+    //find the lowest score in the updated array
+    int lowestScore = studentScores[0];
+    for (int score : studentScores) {
+        if (score <= lowestScore) {
+            lowestScore = score;
+        }
+    }
+
     //Display the scores of the students to the user
     cout << "\n";
     cout << "Scores entered: \n";
 
-    for (int i = 0; i < studentScoresLength; i++) {
+    for (int i = 0; i < numStudents; i++) {
         cout << "Student " << i + 1 << ": " << studentScores[i] << endl;
     }
 
     //calculate the average score of the class
     avgScore = totalScore / numStudents;
-    //find the lowest score in the arrray
-    int lowestScore = studentScores[0];
-
-    for (int i = 0; i < numStudents; i++) {
-        if (studentScores[i] < lowestScore) {
-            lowestScore = studentScores[i];
-        }
-    }
     
     //display the average score and round it to 2 decimal places, highest score, and lowest score of the class
     cout << "\n";
@@ -59,5 +56,7 @@ int main() {
     //Display to the user that the program is finished and has exited
     cout << "\n";
     cout << "Process finished with exit code 0\n";
+
+    //close the program
     return 0;
 }
