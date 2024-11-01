@@ -99,10 +99,10 @@ int main() {
         return 1;
     } else {
         //Write the customers name, surname and final bill to the text file
-        ofile << "Customers name: " << name << endl;
+        ofile << "Customer name: " << name << endl;
         ofile << "Customer surname: " << surname << endl;
         ofile << "Customer Final Bill: R" << fixed << setprecision(2) << totalBill << endl;
-        ofile << "\n";
+        ofile << endl;
         //Close the textfile and display to the user that the bill has been written to the text file
         ofile.close();
         cout << "The bill has been written to " << txtFile << endl;

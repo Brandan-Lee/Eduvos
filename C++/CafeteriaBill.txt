@@ -18,3 +18,7 @@ Customers name: sheldon
 Customer surname: sherbrooke
 Customer Final Bill: R100.00
 
+Customer name: test
+Customer surname: user
+Customer Final Bill: R80.00
+
