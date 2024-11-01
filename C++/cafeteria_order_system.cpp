@@ -92,9 +92,12 @@ int main() {
     cout << "Final Bill: R" << fixed << setprecision(2) << totalBill << endl;
 
     //Textfile operations
-    ofile.open(txtFile, ios::app);
-    //Check to see if the file opened correctly, if not display an error message
-    if (ofile.is_open()) {
+    ofile.open(txtFile, ofstream::app);
+    //check to see if the file exists. Write to the textfile if it exists, else display an error message
+    if (ofile.fail()) {
+        cout << "There was an error writing to " << txtFile << endl;
+        return 1;
+    } else {
         //Write the customers name, surname and final bill to the text file
         ofile << "Customers name: " << name << endl;
         ofile << "Customer surname: " << surname << endl;
@@ -103,9 +106,6 @@ int main() {
         //Close the textfile and display to the user that the bill has been written to the text file
         ofile.close();
         cout << "The bill has been written to " << txtFile << endl;
-    } else {
-        cout << "There was an error opening this file.";
-        return 1;
     }
     
     //close the application.
