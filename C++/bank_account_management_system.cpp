@@ -22,7 +22,7 @@ void createAccount(string &name, int &accountNumber, double &balance) {
     cin >> accountNumber;
 
     //Display to the user atleast once that they have to enter a deposit. input validation to ensure that the user enters a deposit that is greater than 0
-    while (true) {
+    do {
         cout << "Enter your initial deposit (must be greater than 0) R";
         cin >> balance;
 
@@ -33,7 +33,7 @@ void createAccount(string &name, int &accountNumber, double &balance) {
         else {
             cout << "Invalid input. The deposit must be greater than 0. Please try again.\n";
         }
-    }
+    } while (balance <= 0);
 }
 
 //This function allows the user to deposit money into their bank account
@@ -42,7 +42,7 @@ double depositMoney(double &balance) {
     cout << "\n--- Deposit money into Account ---\n";
     
     //Show to the user atleast once that they should deposit money into their bank account
-    while (true) {
+    while (depositAmount >= 0) {
         cout << "Please enter the amount of funds that you want to deposit (greater than 0): ";
         cin >> depositAmount;
 
@@ -60,16 +60,22 @@ double depositMoney(double &balance) {
 
 double withdrawMoney(double &balance) {
     double withdrawAmount;
+    char choice;
     cout << "\n--- Withdraw Money from Account ---\n";
 
     //Show to the user atleast once that they should deposit money into their bank account
-    while (true) {
+    while (balance > 0) {
         cout << "Please enter the amount of funds to withdraw from your account: ";
         cin >> withdrawAmount;
         
         //check to see if the withdraw amount is greater than the current balance or if the user did not enter a valid amount
-        if (withdrawAmount > balance) {
-            cout << "Insufficient funds. The funds currently availabe is: R" << fixed << setprecision(2) << balance << endl;
+        if (withdrawAmount >= balance) {
+            cout << "Insufficient funds. Would you like to view your current balance (Y, N): ";
+            cin >> choice;
+            //display the current balance of the account
+            if (choice == 'Y') {
+                CheckBalance(balance);
+            }
         } else if (withdrawAmount == 0) {
             cout << "The withdraw amount must be greater than 0\n";
         } else {
@@ -83,7 +89,8 @@ double withdrawMoney(double &balance) {
 }
 
 void CheckBalance(const double &balance) {
-    cout << "\nYour current balance is: R" << fixed << setprecision(2) << balance << endl;
+    cout << "\n--- Account Balance ---\n";
+    cout << "Your current balance is: R" << fixed << setprecision(2) << balance << endl;
     cout << endl;
 }
 
@@ -101,7 +108,7 @@ int main() {
     double accBalance;
 
     //This loop must run up until the user decides to exit the program
-    while (true) {
+    while (choice != 6) {
         //Print the bank menu to the user
         cout << "--- Bank Account Management System ---\n";
         cout << "1. Create account\n";
@@ -138,7 +145,4 @@ int main() {
                 break;
         }
     }
-
-    //close the program
-    return 0;
 }
