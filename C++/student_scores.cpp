@@ -13,7 +13,7 @@ int main() {
     int highestScore;
 
     //Display to the user to enter the score of the students
-    cout << "Enter the score for " << numStudents << " students: \n";
+    cout << "Enter the score for " << numStudents << " students:\n";
 
     //Ask the user to add the scores of the number of students
     for (int i = 0; i < numStudents; i++) {
@@ -31,15 +31,14 @@ int main() {
 
     //find the lowest score in the updated array
     int lowestScore = studentScores[0];
-    for (int score : studentScores) {
-        if (score <= lowestScore) {
-            lowestScore = score;
+    for (int i = 0; i < numStudents; i++) {
+        if (studentScores[i] <= lowestScore) {
+            lowestScore = studentScores[i];
         }
     }
 
     //Display the scores of the students to the user
-    cout << "\n";
-    cout << "Scores entered: \n";
+    cout << "\nScores entered: \n";
 
     for (int i = 0; i < numStudents; i++) {
         cout << "Student " << i + 1 << ": " << studentScores[i] << endl;
@@ -49,13 +48,11 @@ int main() {
     avgScore = totalScore / numStudents;
     
     //display the average score and round it to 2 decimal places, highest score, and lowest score of the class
-    cout << "\n";
-    cout << "Average score: " << fixed << setprecision(2) << avgScore << endl;
+    cout << "\nAverage score: " << fixed << setprecision(2) << avgScore << endl;
     cout << "Highest score: " << highestScore << endl;
     cout << "Lowest score: " << lowestScore << endl;
     //Display to the user that the program is finished and has exited
-    cout << "\n";
-    cout << "Process finished with exit code 0\n";
+    cout << "\nProcess finished with exit code 0\n";
 
     //close the program
     return 0;
