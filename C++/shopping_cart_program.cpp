@@ -64,6 +64,7 @@ int main() {
         ofile << "They purchased the item: " << selection << endl;
         ofile << "The quantity of items they purchased was: " << quantity << endl;
         ofile << "Their final bill was: R" << fixed << setprecision(2) << totalCost << endl;
+        ofile << endl;
         ofile.close();
         
         cout << "The customers final bill has been written to: " << txtfile << endl;
