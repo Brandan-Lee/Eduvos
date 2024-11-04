@@ -6,17 +6,17 @@ using namespace std;
 
 int main() {
     //Declaration of array
-    const int numStudents = 5;
-    double studentScores[numStudents];
+    const int NUM_STUDENTS = 5;
+    double studentScores[NUM_STUDENTS];
     //Declaration variables
     double avgScore, totalScore;
     int highestScore;
 
     //Display to the user to enter the score of the students
-    cout << "Enter the score for " << numStudents << " students:\n";
+    cout << "Enter the score for " << NUM_STUDENTS << " students:\n";
 
     //Ask the user to add the scores of the number of students
-    for (int i = 0; i < numStudents; i++) {
+    for (int i = 0; i < NUM_STUDENTS; i++) {
         cout << "Enter score for student " << i + 1 << ": ";
         cin >> studentScores[i];
 
@@ -31,7 +31,7 @@ int main() {
 
     //find the lowest score in the updated array
     int lowestScore = studentScores[0];
-    for (int i = 0; i < numStudents; i++) {
+    for (int i = 0; i < NUM_STUDENTS; i++) {
         if (studentScores[i] <= lowestScore) {
             lowestScore = studentScores[i];
         }
@@ -40,12 +40,12 @@ int main() {
     //Display the scores of the students to the user
     cout << "\nScores entered: \n";
 
-    for (int i = 0; i < numStudents; i++) {
+    for (int i = 0; i < NUM_STUDENTS; i++) {
         cout << "Student " << i + 1 << ": " << studentScores[i] << endl;
     }
 
     //calculate the average score of the class
-    avgScore = totalScore / numStudents;
+    avgScore = totalScore / NUM_STUDENTS;
     
     //display the average score and round it to 2 decimal places, highest score, and lowest score of the class
     cout << "\nAverage score: " << fixed << setprecision(2) << avgScore << endl;
