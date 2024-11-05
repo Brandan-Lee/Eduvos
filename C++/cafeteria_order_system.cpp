@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 
 //This program receives input from the user, displays a cafeteria menu, calculates a total bill and applies a discount if applicable. The customers total bill and details will be written to a textfile
@@ -23,6 +24,7 @@ int main() {
     const double PIZZA_PRICE = 35.00;
     const double SOUP_PRICE = 18.00;
     const double BURGER_PRICE = 40.00;
+
     //Prompt the user to enter their name, surname and the number of items that they would like to order
     cout << "Enter your name: ";
     cin >> name;
@@ -33,15 +35,16 @@ int main() {
     //Display the cafeteria menu
     cout << "\n";
     cout << "Cafeteria Menu:\n";
-    cout << "1. Coffee - R" << COFFEE_PRICE << ".00\n";
-    cout << "2. Sandwich - R" << SANDWICH_PRICE << ".00\n";
-    cout << "3. Salad - R" << SALAD_PRICE << ".00\n";
-    cout << "4. Juice - R" << JUICE_PRICE << ".00\n";
-    cout << "5. Muffin - R" << MUFFIN_PRICE << ".00\n";
-    cout << "6. Pizza Slice - R" << PIZZA_PRICE << ".00\n";
-    cout << "7. Soup - R" << SOUP_PRICE << ".00\n";
-    cout << "8. Burger - R" << BURGER_PRICE << ".00\n";
+    cout << "1. Coffee - R" << COFFEE_PRICE << fixed << setprecision(2) << endl;
+    cout << "2. Sandwich - R" << SANDWICH_PRICE << fixed << setprecision(2) << endl;
+    cout << "3. Salad - R" << SALAD_PRICE << fixed << setprecision(2) << endl;
+    cout << "4. Juice - R" << JUICE_PRICE << fixed << setprecision(2) << endl;
+    cout << "5. Muffin - R" << MUFFIN_PRICE << fixed << setprecision(2) << endl;
+    cout << "6. Pizza Slice - R" << PIZZA_PRICE << fixed << setprecision(2) << endl;
+    cout << "7. Soup - R" << SOUP_PRICE << fixed << setprecision(2) << endl;
+    cout << "8. Burger - R" << BURGER_PRICE << fixed << setprecision(2) << endl;
     cout << "\n";
+
     //Ask the user to select their item and add it to the total bill with input validation
     for (int i = 1; i <= numItems; i++) {
         cout << "Select item " << i << " (1-8): ";
@@ -77,30 +80,34 @@ int main() {
                 i--;
         }
     }
+
     //Calculate if the user will receive a discount or not
     if (totalBill > DISCOUNT_THRESHOLD) {
         totalBill = totalBill - (totalBill * DISCOUNT_RATE);
     } else {
         cout << "No discount applied.\n";
     }
+
     //Display the final bill to the user
-    cout << "Final Bill: R" << totalBill << ".00\n";
+    cout << "Final Bill: R" << fixed << setprecision(2) << totalBill << endl;
+
     //Textfile operations
     ofile.open(txtFile, ios::app);
-    //Check to see if the file opened correctly, if not display an error message
-    if (ofile.is_open()) {
+    //check to see if the file exists. Write to the textfile if it exists, else display an error message
+    if (ofile.fail()) {
+        cout << "There was an error writing to " << txtFile << endl;
+        return 1;
+    } else {
         //Write the customers name, surname and final bill to the text file
-        ofile << "Customers name: " << name << endl;
+        ofile << "Customer name: " << name << endl;
         ofile << "Customer surname: " << surname << endl;
-        ofile << "Customer Final Bill: R" << totalBill << endl;
-        ofile << "\n";
+        ofile << "Customer Final Bill: R" << fixed << setprecision(2) << totalBill << endl;
+        ofile << endl;
         //Close the textfile and display to the user that the bill has been written to the text file
         ofile.close();
         cout << "The bill has been written to " << txtFile << endl;
-    } else {
-        cout << "There was an error opening this file.";
-        return 1;
     }
+    
     //close the application.
     return 0;
 }

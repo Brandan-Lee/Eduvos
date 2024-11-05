@@ -6,3 +6,19 @@ Customers name: brandan-lee
 Customer surname: sherbrooke
 Customer Final Bill: R173.7
 
+Customers name: test2
+Customer surname: user
+Customer Final Bill: R80
+
+Customers name: maggie
+Customer surname: sherbrooke
+Customer Final Bill: R173.7
+
+Customers name: sheldon
+Customer surname: sherbrooke
+Customer Final Bill: R100.00
+
+Customer name: test
+Customer surname: user
+Customer Final Bill: R80.00
+
