@@ -1,0 +1,16 @@
+Customer full name: test user
+They purchased the item: Book
+The quantity of items they purchased was: 5
+Their final bill was: R99.50
+Customer full name: test user
+They purchased the item: 20
+The quantity of items they purchased was: 32763
+Their final bill was: R619384.51
+Customer full name: test user
+They purchased the item: 29
+The quantity of items they purchased was: 32763
+Their final bill was: R619384.51
+Customer full name: test user
+They purchased the item: Book
+The quantity of items they purchased was: 20
+Their final bill was: R378.10
