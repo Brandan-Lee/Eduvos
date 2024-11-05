@@ -92,7 +92,7 @@ int main() {
     cout << "Final Bill: R" << fixed << setprecision(2) << totalBill << endl;
 
     //Textfile operations
-    ofile.open(txtFile, ofstream::app);
+    ofile.open(txtFile, ios::app);
     //check to see if the file exists. Write to the textfile if it exists, else display an error message
     if (ofile.fail()) {
         cout << "There was an error writing to " << txtFile << endl;
