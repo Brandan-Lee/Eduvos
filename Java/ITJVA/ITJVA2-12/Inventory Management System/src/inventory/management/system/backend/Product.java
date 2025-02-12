@@ -1,11 +1,10 @@
-package com.example.inventorymanagementsystem.backend;
-
-//This is part of question 2 for the project
+package inventory.management.system.backend;
 
 import java.util.Date;
 
 public class Product {
 
+    //Declaration of variables to build the class
     private int quantity;
     private String productId, name;
     private double price;
@@ -21,7 +20,6 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    //create getter and setter methods for the products
     public String getProductId() {
         return productId;
     }
@@ -42,7 +40,7 @@ public class Product {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(int quantity)  {
         this.quantity = quantity;
     }
 
@@ -69,4 +67,5 @@ public class Product {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }
