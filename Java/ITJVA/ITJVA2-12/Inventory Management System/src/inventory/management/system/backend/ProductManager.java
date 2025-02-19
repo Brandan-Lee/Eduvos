@@ -9,7 +9,6 @@ public class ProductManager {
 
     ArrayList<Product> products;
 
-
     //This function allows the user to add a product if the product does not exist yet
     public void addProduct(Product product) {
         if (products.contains(product.getProductId())) {
