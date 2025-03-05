@@ -1,5 +1,6 @@
 package inventory.management.system.backend;
 
+import java.util.Currency;
 import java.util.Date;
 
 public class Product {
@@ -7,11 +8,11 @@ public class Product {
     //Declaration of variables to build the class
     private int quantity;
     private String productId, name;
-    private double price;
+    private Currency price;
     private Date createdAt, updatedAt;
 
     //create the constructor for the class
-    public Product(String productId, String name, int quantity, double price, Date createdAt, Date updatedAt) {
+    public Product(String productId, String name, int quantity, Currency price, Date createdAt, Date updatedAt) {
         this.productId = productId;
         this.name = name;
         this.quantity = quantity;
@@ -19,6 +20,8 @@ public class Product {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    //Public getter and setter methods to access all the private variables
 
     public String getProductId() {
         return productId;
@@ -44,11 +47,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
+    public Currency getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Currency price) {
         this.price = price;
     }
 

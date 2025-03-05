@@ -7,7 +7,7 @@ public class ProductManager {
 
     //I am using an ArrayList due to the fact that we won't be taught the hashmap datastructure during this module
 
-    ArrayList<Product> products;
+    public ArrayList<Product> products;
 
     //This function allows the user to add a product if the product does not exist yet
     public void addProduct(Product product) {
@@ -35,6 +35,7 @@ public class ProductManager {
         }
     }
 
+    //This function deletes the product from the products arraylist if the product ID does exist
     public void deleteProduct(String productId) {
         if (products.contains(productId)) {
             products.remove(productId);

@@ -10,7 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.Date;
+ import java.util.Date;
 
 /**
  *
@@ -20,10 +20,12 @@ import java.util.Date;
 //Question 1: This is the main page of the inventory management system
 
 public class InventoryManagementSystem extends Application {
-    
+    //Global variables for all pages
+    AddProductView addView = new AddProductView();
+
     @Override
     public void start(Stage primaryStage) {
-        //Create a product manager object for use when displaying updated table with
+        //Create a product manager object to display all the products added to the product array list in the backend class
         ProductManager productManager = new ProductManager();
 
         //GUI Layout Components and UI control initialization
@@ -31,8 +33,9 @@ public class InventoryManagementSystem extends Application {
         final Button addBtn = new Button("Add New Product");
         final Button updateBtn = new Button("Update Product");
         final Button deleteBtn = new Button("Delete Product");
+        final Label purchase = new Label("Purchase");
         final HBox btnBox = new HBox(addBtn, updateBtn, deleteBtn);
-        final VBox vbox = new VBox(tblProducts, btnBox);
+        final VBox box = new VBox(purchase, tblProducts, btnBox);
 
         //Ensure that the table resizes itself with all the data that has been added
         tblProducts.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
@@ -56,19 +59,28 @@ public class InventoryManagementSystem extends Application {
                 colId, colName, colQuantity, colPrice, colCreatedAt, colUpdatedAt
         );
 
-        //Add the horizontal box for the buttons and set the spacing between the buttons
+        //set the spacing between the buttons
         btnBox.setSpacing(10);
 
         //Add padding to the Vertical box as well as create spacing between the table component and the horizontal boxI
-        vbox.setPadding( new Insets(10) );
-        vbox.setSpacing( 10 );
+        box.setPadding( new Insets(10) );
+        box.setSpacing( 10 );
 
         //Create the Scene and update the stage. On start the inventory management system stage should be displayed
-        Scene scene = new Scene(vbox);
+        Scene scene = new Scene(box, 600, 400);
 
         primaryStage.setTitle("Inventory Management System");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        //Change the form with UI button controls
+        addBtn.setOnAction(e -> {
+            try {
+                addView.start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     public static void main(String[] args) {
