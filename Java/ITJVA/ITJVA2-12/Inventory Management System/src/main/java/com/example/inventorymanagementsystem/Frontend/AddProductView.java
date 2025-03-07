@@ -65,7 +65,7 @@ public class AddProductView extends Application {
 
         //Button events
         addBtn.setOnAction(e -> {
-            CustomAlerts alert = new CustomAlerts();
+            CustomAlerts alert = new CustomAlerts(productManager);
             ValidatingFields validation = new ValidatingFields();
 
             try {

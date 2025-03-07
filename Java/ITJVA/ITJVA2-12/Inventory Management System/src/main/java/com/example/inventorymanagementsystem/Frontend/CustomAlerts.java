@@ -9,23 +9,21 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class CustomAlerts {
 
-    private static InventoryManagementSystem ims = new InventoryManagementSystem();
-    private static final ProductManager productManager = new ProductManager();
-    private static final ValidatingFields validation = new ValidatingFields();
-    private static int productId = 0;
-    private static int quantity = 0;
-    private static double price = 0.0;
-    private static Product product;
+    private final ProductManager productManager;
+    private final ValidatingFields validation = new ValidatingFields();
+    private final ArrayList<Product> products;
+    private Product product;
+    private int productId = 0;
+    private int quantity = 0;
+    private double price = 0.0;
 
-    public static InventoryManagementSystem getIms() {
-        return ims;
-    }
-
-    public static void setIms(InventoryManagementSystem ims) {
-        CustomAlerts.ims = ims;
+    public CustomAlerts(ProductManager productManager) {
+        this.productManager = productManager;
+        this.products = productManager.viewProducts();
     }
 
     private GridPane createGrid(TextField txtInput) {
@@ -38,9 +36,7 @@ public class CustomAlerts {
     public void showAndConfigureAlert(Alert alert, String title, String headerText, TextField txtInput) {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
-
         alert.getDialogPane().setContent(createGrid(txtInput));
-
         alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
     }
 
@@ -59,7 +55,14 @@ public class CustomAlerts {
                         txtInput.setText("");
                     } else {
                         productId = Integer.parseInt(txtInput.getText());
-                        showQuantityConfAlert();
+
+                        for (Product p : products) {
+                            if (p.getProductId() == productId) {
+                                product = p;
+                                fillProduct(product);
+                                showQuantityConfAlert();
+                            }
+                        }
                     }
                 } else {
                     alert.close();
@@ -71,15 +74,22 @@ public class CustomAlerts {
 
     }
 
+    public void fillProduct(Product product) {
+        this.product = product;
+        this.quantity = product.getQuantity();
+        this.price = product.getPrice();
+    }
+
     public void showQuantityConfAlert() {
         TextField txtInput = new TextField();
+        txtInput.setText(Integer.toString(quantity));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         showAndConfigureAlert(alert, "Input", "Enter New Quantity: ", txtInput);
 
         try {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    if (!validation.isNotEmpty(txtInput)) {
+                    if (validation.isNotEmpty(txtInput)) {
                         errorAlert("The Quantity field is empty");
                     } else if (!validation.isNumber(txtInput)) {
                         errorAlert("The Quantity field can only contain numbers");
@@ -100,13 +110,14 @@ public class CustomAlerts {
 
     public void showPriceConfAlert() {
         TextField txtInput = new TextField();
+        txtInput.setText(Double.toString(price));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         showAndConfigureAlert(alert, "Input", "Enter new Price: ", txtInput);
 
         try {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    if (!validation.isNotEmpty(txtInput)) {
+                    if (validation.isNotEmpty(txtInput)) {
                         errorAlert("The Price field is empty");
                     } else if (!validation.isCurrency(txtInput)) {
                         errorAlert("The Price field can only contain numbers and a decimal point");
@@ -114,12 +125,12 @@ public class CustomAlerts {
                     } else {
                         price = Double.parseDouble(txtInput.getText());
 
-                        product.setProductId(productId);
-                        product.setQuantity(quantity);
-                        product.setPrice(price);
-                        product.setUpdatedAt(LocalDate.now());
-
-                        productManager.updateProduct(productId, product);
+                        if (productManager.updateProduct(productId, product)) {
+                            showProductInfoAlert("This product has been successfully updated");
+                            product.setQuantity(quantity);
+                            product.setPrice(price);
+                            product.setUpdatedAt(LocalDate.now());
+                        }
                     }
                 } else {
                     alert.close();
@@ -153,7 +164,7 @@ public class CustomAlerts {
         try {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    if (!validation.isNotEmpty(txtInput)) {
+                    if (validation.isNotEmpty(txtInput)) {
                         errorAlert("The Product ID field is empty");
                     } else if (!validation.isNumber(txtInput)) {
                         errorAlert("The Product ID field can only contain numbers");
@@ -182,7 +193,9 @@ public class CustomAlerts {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    productManager.deleteProduct(productId);
+                    if (productManager.deleteProduct(productId)) {
+                        showProductDeleteInfoAlert();
+                    }
                 } catch (RuntimeException ex) {
                     errorAlert("There was an error. Please try again");
                 }

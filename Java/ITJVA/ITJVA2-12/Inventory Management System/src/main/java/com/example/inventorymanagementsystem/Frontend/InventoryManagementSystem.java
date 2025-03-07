@@ -25,7 +25,7 @@ public class InventoryManagementSystem extends Application {
     public void start(Stage primaryStage) {
         productManager = new ProductManager();
         AddProductView addView = new AddProductView(productManager);
-        CustomAlerts alerts = new CustomAlerts();
+        CustomAlerts alerts = new CustomAlerts(productManager);
 
         TableView<Product> tblProducts = createTable();
 
@@ -75,6 +75,7 @@ public class InventoryManagementSystem extends Application {
         updateBtn.setOnAction(e -> {
             try {
                 alerts.showProductIdConfAlert();
+                refreshTable(tblProducts, productManager);
             } catch (RuntimeException ex) {
                 alerts.errorAlert("There was an error loading the Update Product view. Please check your configuration.");
             }
@@ -83,6 +84,7 @@ public class InventoryManagementSystem extends Application {
         deleteBtn.setOnAction(e -> {
             try {
                 alerts.showProductDeleteConfAlert();
+                refreshTable(tblProducts, productManager);
             } catch (RuntimeException ex) {
                 alerts.errorAlert("There was an error loading the Delete Product view. Please check your configuration.");
             }

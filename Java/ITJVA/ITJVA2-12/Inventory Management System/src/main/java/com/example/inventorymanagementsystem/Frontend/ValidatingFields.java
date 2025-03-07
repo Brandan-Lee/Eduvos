@@ -17,6 +17,6 @@ public class ValidatingFields {
     }
 
     public boolean isCurrency(TextField txt) {
-        return txt.getText().matches("^[0-9]+\\.[0-9]+$");
+        return txt.getText().matches("^[0-9]+(\\.[0-9]+)?$");
     }
 }
