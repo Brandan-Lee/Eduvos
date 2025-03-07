@@ -17,9 +17,6 @@ public class CustomAlerts {
     private final ValidatingFields validation = new ValidatingFields();
     private final ArrayList<Product> products;
     private Product product;
-    private int productId = 0;
-    private int quantity = 0;
-    private double price = 0.0;
 
     public CustomAlerts(ProductManager productManager) {
         this.productManager = productManager;
@@ -33,6 +30,18 @@ public class CustomAlerts {
         return grid;
     }
 
+    private Product findProduct(int productId) {
+        for (Product p : products) {
+            if (p.getProductId() == productId) {
+                product = p;
+            } else {
+                product = null;
+            }
+        }
+
+        return product;
+    }
+
     public void showAndConfigureAlert(Alert alert, String title, String headerText, TextField txtInput) {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
@@ -40,150 +49,80 @@ public class CustomAlerts {
         alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
     }
 
-    public void showProductIdConfAlert() {
-        TextField txtInput = new TextField();
+    private void showConfirmationAlert(String title, String header, TextField txtInput, Runnable onOk) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        showAndConfigureAlert(alert, "Input", "Enter Product ID to Update: ", txtInput);
+        showAndConfigureAlert(alert, title, header, txtInput);
 
-        try {
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    if (validation.isNotEmpty(txtInput)) {
-                        errorAlert("The Product ID field is empty");
-                    } else if (!validation.isNumber(txtInput)) {
-                        errorAlert("The Product ID field can only contain numbers");
-                        txtInput.setText("");
-                    } else {
-                        productId = Integer.parseInt(txtInput.getText());
-
-                        for (Product p : products) {
-                            if (p.getProductId() == productId) {
-                                product = p;
-                                fillProduct(product);
-                                showQuantityConfAlert();
-                            }
-                        }
-                    }
-                } else {
-                    alert.close();
-                }
-            });
-        } catch (RuntimeException ex) {
-            errorAlert("There was an error. Please try again");
-        }
-
+        alert.showAndWait().ifPresent(response -> {
+            onOk.run();
+        });
     }
 
-    public void fillProduct(Product product) {
-        this.product = product;
-        this.quantity = product.getQuantity();
-        this.price = product.getPrice();
+    public void showProductIdConfAlert() {
+        TextField txtInput = new TextField();
+        showConfirmationAlert("Input", "Enter Product ID to update: ", txtInput, () -> {
+            validation.validateID(txtInput, this);
+
+            int productId = Integer.parseInt(txtInput.getText());
+            findProduct(productId);
+
+            if (product != null) {
+                showQuantityConfAlert();
+            } else {
+                errorAlert("This product ID does not exist. Please try again");
+                showProductIdConfAlert();
+            }
+        });
     }
 
     public void showQuantityConfAlert() {
         TextField txtInput = new TextField();
-        txtInput.setText(Integer.toString(quantity));
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        showAndConfigureAlert(alert, "Input", "Enter New Quantity: ", txtInput);
+        txtInput.setText(Integer.toString(product.getQuantity()));
+        showConfirmationAlert("Input", "Enter New Quantity", txtInput, () -> {
+            validation.validateNumber(txtInput, this);
 
-        try {
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    if (validation.isNotEmpty(txtInput)) {
-                        errorAlert("The Quantity field is empty");
-                    } else if (!validation.isNumber(txtInput)) {
-                        errorAlert("The Quantity field can only contain numbers");
-                        txtInput.setText("");
-                    } else {
-                        quantity = Integer.parseInt(txtInput.getText());
-                        showPriceConfAlert();
-                    }
-                } else {
-                    alert.close();
-                }
-            });
-        } catch (RuntimeException ex) {
-            errorAlert("There was an error. Please try again");
-        }
-
+            product.setQuantity(Integer.parseInt(txtInput.getText()));
+            showPriceConfAlert();
+        });
     }
 
     public void showPriceConfAlert() {
         TextField txtInput = new TextField();
-        txtInput.setText(Double.toString(price));
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        showAndConfigureAlert(alert, "Input", "Enter new Price: ", txtInput);
+        txtInput.setText(Double.toString(product.getPrice()));
+        showConfirmationAlert("Input", "Enter new price: ", txtInput, () -> {
+            try {
+                validation.validatePrice(txtInput, this);
 
-        try {
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    if (validation.isNotEmpty(txtInput)) {
-                        errorAlert("The Price field is empty");
-                    } else if (!validation.isCurrency(txtInput)) {
-                        errorAlert("The Price field can only contain numbers and a decimal point");
-                        txtInput.setText("");
-                    } else {
-                        price = Double.parseDouble(txtInput.getText());
+                product.setPrice(Double.parseDouble(txtInput.getText()));
 
-                        if (productManager.updateProduct(productId, product)) {
-                            showProductInfoAlert("This product has been successfully updated");
-                            product.setQuantity(quantity);
-                            product.setPrice(price);
-                            product.setUpdatedAt(LocalDate.now());
-                        }
-                    }
-                } else {
-                    alert.close();
+                if (productManager.updateProduct(product.getProductId(), product)) {
+                    showProductInfoAlert("This product has been successfully updated");
+                    product.setUpdatedAt(LocalDate.now());
                 }
-            });
-        } catch (RuntimeException ex) {
-            errorAlert("There was an error. Please try again");
-        }
-
-    }
-
-    public void showProductInfoAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(message);
-        alert.setTitle("Message");
-
-        alert.getButtonTypes().setAll(ButtonType.OK);
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                alert.close();
+            } catch (RuntimeException ex) {
+                errorAlert("There was an error. Please try again");
             }
         });
     }
 
     public void showProductDeleteConfAlert() {
         TextField txtInput = new TextField();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        showAndConfigureAlert(alert, "Input", "Enter Product ID to Delete: ", txtInput);
+        showConfirmationAlert("Input", "Enter product ID to delete: ", txtInput, () -> {
+            validation.validateID(txtInput, this);
+            int productId = Integer.parseInt(txtInput.getText());
 
-        try {
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    if (validation.isNotEmpty(txtInput)) {
-                        errorAlert("The Product ID field is empty");
-                    } else if (!validation.isNumber(txtInput)) {
-                        errorAlert("The Product ID field can only contain numbers");
-                        txtInput.setText("");
-                    } else {
-                        productId = Integer.parseInt(txtInput.getText());
-                        showDeleteAlertWarning();
-                    }
-                } else {
-                    alert.close();
-                }
-            });
-        } catch (RuntimeException ex) {
-            errorAlert("There was an error. Please try again");
-        }
+            findProduct(productId);
 
+            if (product != null) {
+                showDeleteAlertWarning(productId);
+            } else {
+                errorAlert("This product ID does not exist. Please try again");
+                showProductDeleteConfAlert();
+            }
+        });
     }
 
-    public void showDeleteAlertWarning() {
+    public void showDeleteAlertWarning(int productId) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText("Are you sure you want to delete this product? ");
         alert.setTitle("Warning");
@@ -200,6 +139,20 @@ public class CustomAlerts {
                     errorAlert("There was an error. Please try again");
                 }
             } else {
+                alert.close();
+            }
+        });
+    }
+
+    public void showProductInfoAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(message);
+        alert.setTitle("Message");
+
+        alert.getButtonTypes().setAll(ButtonType.OK);
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
                 alert.close();
             }
         });
@@ -229,8 +182,6 @@ public class CustomAlerts {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     alert.close();
-                } else {
-                    System.out.println("Operation canceled.");
                 }
             });
     }

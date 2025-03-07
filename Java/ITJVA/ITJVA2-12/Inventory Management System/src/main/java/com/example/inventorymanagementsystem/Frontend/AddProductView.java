@@ -18,6 +18,7 @@ import java.time.LocalDate;
 public class AddProductView extends Application {
 
     private final ProductManager productManager;
+    private final ValidatingFields validation = new ValidatingFields();
     private Product product;
     private int count = 1;
 
@@ -27,6 +28,17 @@ public class AddProductView extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        GridPane grid = createMainLayout(primaryStage);
+
+        //Create the scene for the program
+        Scene scene = new Scene(grid, 300, 200);
+        primaryStage.setTitle("Add Product");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private GridPane createMainLayout(Stage primaryStage) {
+        CustomAlerts alert = new CustomAlerts(productManager);
         //GUI Layout Components and UI control initialization
         final Label lblName = new Label("Name:");
         TextField txtName = new TextField();
@@ -57,77 +69,54 @@ public class AddProductView extends Application {
         btnBox.setPadding(new Insets(0,10,0,0));
         grid.add(btnBox,1, 3);
 
-        //Create the scene for the program
-        Scene scene = new Scene(grid, 300, 200);
-        primaryStage.setTitle("Add Product");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        buttonControl(addBtn, closeBtn, txtName, txtQuantity, txtPrice, alert, primaryStage);
 
-        //Button events
-        addBtn.setOnAction(e -> {
-            CustomAlerts alert = new CustomAlerts(productManager);
-            ValidatingFields validation = new ValidatingFields();
+        return grid;
+    }
 
-            try {
-                int productId = count;
-                String name = "";
-                int quantity = 0;
-                double price = 0.0;
-                LocalDate created = LocalDate.now();
-                LocalDate updated = null;
+    private void addProduct(TextField txtName, TextField txtQuantity, TextField txtPrice, CustomAlerts alert) {
+        try {
+            validation.validateName(txtName, alert);
+            validation.validateNumber(txtQuantity, alert);
+            validation.validatePrice(txtPrice, alert);
+            int productId = count;
+            String name = txtName.getText();
+            int quantity = Integer.parseInt(txtQuantity.getText());
+            double price = Double.parseDouble(txtPrice.getText());
+            LocalDate created = LocalDate.now();
+            LocalDate updated = null;
 
-                if (!validation.isString(txtName)) {
-                    alert.errorAlert("Name input can only contain letters. Please try again.");
-                    txtName.setText("");
-                } else if (validation.isNotEmpty(txtName)) {
-                    alert.errorAlert("The name text field is empty.");
-                } else {
-                    name = txtName.getText();
-                }
-
-                if (!validation.isNumber(txtQuantity)) {
-                    alert.errorAlert("Quantity input can only contain numbers. Please try again.");
-                    txtQuantity.setText("");
-                } else if (validation.isNotEmpty(txtQuantity)) {
-                    alert.errorAlert("The quantity text field is empty.");
-                } else {
-                    quantity = Integer.parseInt(txtQuantity.getText());
-                }
-
-                if (!validation.isCurrency(txtPrice)) {
-                    alert.errorAlert("Price input can only contain numbers and a decimal point. Please try again");
-                    txtPrice.setText("");
-                } else if (validation.isNotEmpty(txtPrice)) {
-                    alert.errorAlert("The price text field is empty.");
-                } else {
-                    price = Double.parseDouble(txtPrice.getText());
-                }
-
-                if (product == null) {
-                    product = new Product(productId, name, quantity, price, created, updated);
-                    product.setProductId(productId);
-                    product.setName(name);
-                    product.setQuantity(quantity);
-                    product.setPrice(price);
-                    product.setCreatedAt(created);
-                    product.setUpdatedAt(updated);
-                } else {
-                    product = new Product(productId, name, quantity, price, created, updated);
-                }
-
-                if (productManager.addProduct(product)) {
-                    alert.showProductInfoAlert("The product has been successfully added");
-                }
-
-                count++;
-
-                txtName.setText("");
-                txtQuantity.setText("");
-                txtPrice.setText("");
-
-            } catch (RuntimeException ex) {
-                alert.errorAlert("There was a problem adding the product. Please check your configuration");
+            if (product == null) {
+                product = new Product(productId, name, quantity, price, created, updated);
+                product.setProductId(productId);
+                product.setName(name);
+                product.setQuantity(quantity);
+                product.setPrice(price);
+                product.setCreatedAt(created);
+                product.setUpdatedAt(updated);
+            } else {
+                product = new Product(productId, name, quantity, price, created, updated);
             }
+
+            if (productManager.addProduct(product)) {
+                alert.showProductInfoAlert("The product has been successfully added");
+                clearAddFields(txtName, txtQuantity, txtPrice);
+                count++;
+            }
+        } catch (RuntimeException ex) {
+            alert.errorAlert("There was a problem adding the product. Please check your configuration");
+        }
+    }
+
+    private void clearAddFields(TextField txtQuantity, TextField txtPrice, TextField txtName) {
+        txtName.setText("");
+        txtQuantity.setText("");
+        txtPrice.setText("");
+    }
+
+    private void buttonControl(Button addBtn, Button closeBtn, TextField txtName, TextField txtQuantity, TextField txtPrice, CustomAlerts alert, Stage primaryStage) {
+        addBtn.setOnAction(e -> {
+            addProduct(txtName, txtQuantity, txtPrice, alert);
         });
 
         closeBtn.setOnAction(e -> {

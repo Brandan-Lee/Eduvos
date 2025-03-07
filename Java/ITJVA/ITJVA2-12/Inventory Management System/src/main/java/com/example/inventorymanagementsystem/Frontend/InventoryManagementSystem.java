@@ -20,92 +20,22 @@ import java.time.LocalDate;
 public class InventoryManagementSystem extends Application {
 
     private ProductManager productManager;
+    private CustomAlerts alerts;
+
+    public InventoryManagementSystem() {
+        this.productManager = new ProductManager();
+        this.alerts = new CustomAlerts(productManager);
+    }
 
     @Override
     public void start(Stage primaryStage) {
-        productManager = new ProductManager();
         AddProductView addView = new AddProductView(productManager);
-        CustomAlerts alerts = new CustomAlerts(productManager);
-
         TableView<Product> tblProducts = createTable();
-
-        Button addBtn = new Button("Add New Product");
-        Button updateBtn = new Button("Update Product");
-        Button deleteBtn = new Button("Delete Product");
-        Button viewAllBtn = new Button("View All Products");
-        Button closeBtn = new Button("Close");
-        Label lblPurchase = new Label("Purchase");
-        HBox btnBox = new HBox(addBtn, updateBtn, deleteBtn, viewAllBtn, closeBtn);
-        VBox vBox = new VBox(lblPurchase, tblProducts, btnBox);
-
-        if (productManager.viewProducts().isEmpty()) {
-            updateBtn.setDisable(true);
-            deleteBtn.setDisable(true);
-            viewAllBtn.setDisable(true);
-        }
-
-        btnBox.setSpacing(30);
-        vBox.setPadding(new Insets(10));
-        vBox.setSpacing(10);
-
-        Scene scene = new Scene(vBox, 600, 400);
+        VBox main = createMainLayout(tblProducts, primaryStage, addView);
+        Scene scene = new Scene(main, 600, 400);
         primaryStage.setTitle("Inventory Management System");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        addBtn.setOnAction(e -> {
-            try {
-
-                Stage addStage = new Stage();
-                addView.start(addStage);
-                addStage.setOnHiding(event -> {
-                    refreshTable(tblProducts, productManager);
-                });
-
-                updateBtn.setDisable(false);
-                deleteBtn.setDisable(false);
-                viewAllBtn.setDisable(false);
-
-            } catch (IOException ex) {
-                alerts.errorAlert("There was a problem loading the Add Product view. Please check your configuration.");
-            }
-
-        });
-
-        updateBtn.setOnAction(e -> {
-            try {
-                alerts.showProductIdConfAlert();
-                refreshTable(tblProducts, productManager);
-            } catch (RuntimeException ex) {
-                alerts.errorAlert("There was an error loading the Update Product view. Please check your configuration.");
-            }
-        });
-
-        deleteBtn.setOnAction(e -> {
-            try {
-                alerts.showProductDeleteConfAlert();
-                refreshTable(tblProducts, productManager);
-            } catch (RuntimeException ex) {
-                alerts.errorAlert("There was an error loading the Delete Product view. Please check your configuration.");
-            }
-        });
-
-        viewAllBtn.setOnAction(e -> {
-            int count = 0;
-
-            try {
-                refreshTable(tblProducts, productManager);
-                count++;
-            } catch (RuntimeException ex) {
-                alerts.errorAlert("There was an error updating the table. Please check your configuration.");
-            }
-
-            if (count == 1) {
-                viewAllBtn.setDisable(true);
-            }
-        });
-
-        closeBtn.setOnAction(e -> primaryStage.close());
     }
 
     private TableView<Product> createTable() {
@@ -128,6 +58,115 @@ public class InventoryManagementSystem extends Application {
         tblProducts.getColumns().addAll(colId, colName, colQuantity, colPrice, colCreatedAt, colUpdatedAt);
 
         return tblProducts;
+    }
+
+    private VBox createMainLayout(TableView<Product> product, Stage primaryStage, AddProductView addView) {
+        Button addBtn = new Button("Add New Product");
+        Button updateBtn = new Button("Update Product");
+        Button deleteBtn = new Button("Delete Product");
+        Button viewBtn = new Button("View All Products");
+        Button closeBtn = new Button("Close");
+        Label lblPurchase = new Label("Purchase");
+        HBox btnBox = new HBox(addBtn, updateBtn, deleteBtn, viewBtn, closeBtn);
+        VBox vBox = new VBox(lblPurchase, product, btnBox);
+
+        btnBox.setSpacing(30);
+        vBox.setPadding(new Insets(10));
+        vBox.setSpacing(10);
+
+        disableButtons(updateBtn, deleteBtn, viewBtn);
+        buttonControl(addBtn, updateBtn, deleteBtn, viewBtn, closeBtn, product, addView, primaryStage);
+
+        return vBox;
+    }
+    
+    private void disableButtons(Button updateBtn, Button deleteBtn, Button viewBtn) {
+        if (productManager.viewProducts().isEmpty()) {
+            updateBtn.setDisable(true);
+            deleteBtn.setDisable(true);
+            viewBtn.setDisable(true);
+        }
+    }
+
+    private void enableButtons(Button updateBtn, Button deleteBtn, Button viewBtn) {
+        updateBtn.setDisable(false);
+        deleteBtn.setDisable(false);
+        viewBtn.setDisable(false);
+    }
+
+    private void buttonControl(Button addBtn, Button updateBtn, Button deleteBtn, Button viewBtn, Button closeBtn, TableView<Product> products, AddProductView addView, Stage primaryStage) {
+        addBtn.setOnAction(e -> {
+            addProduct(products, addView, updateBtn, deleteBtn, viewBtn);
+            enableButtons(updateBtn, deleteBtn, viewBtn);
+        });
+
+        updateBtn.setOnAction(e -> {
+            updateProduct(products);
+        });
+
+        deleteBtn.setOnAction(e -> {
+            deleteProduct(products);
+        });
+
+        viewBtn.setOnAction(e -> {
+            viewProducts(products, viewBtn);
+        });
+
+        closeBtn.setOnAction(e -> {
+            handleClose(primaryStage);
+        });
+    }
+
+    private void addProduct(TableView<Product> products, AddProductView addView, Button updateBtn, Button deleteBtn, Button viewBtn) {
+        try {
+            Stage addStage = new Stage();
+            addView.start(addStage);
+            addStage.setOnHiding(event -> {
+                refreshTable(products, productManager);
+            });
+
+            enableButtons(updateBtn, deleteBtn, viewBtn);
+        } catch (IOException ex) {
+            alerts.errorAlert("There was a problem loading the Add Product view. Please check your configuration.");
+        }
+
+    }
+
+    private void updateProduct(TableView<Product> products) {
+        try {
+            alerts.showProductIdConfAlert();
+            refreshTable(products, productManager);
+        } catch (RuntimeException ex) {
+            alerts.errorAlert("There was an error loading the Update Product view. Please check your configuration.");
+        }
+    }
+
+    private void deleteProduct(TableView<Product> products) {
+        try {
+            alerts.showProductDeleteConfAlert();
+            refreshTable(products, productManager);
+        } catch (RuntimeException ex) {
+            alerts.errorAlert("There was an error loading the Delete Product view. Please check your configuration.");
+        }
+    }
+
+    private void viewProducts(TableView<Product> products, Button viewBtn) {
+        int count = 0;
+
+        try {
+            refreshTable(products, productManager);
+            count++;
+        } catch (RuntimeException ex) {
+            alerts.errorAlert("There was an error updating the table. Please check your configuration.");
+        }
+
+        if (count == 1) {
+            viewBtn.setDisable(true);
+        }
+    }
+
+    private void handleClose(Stage primaryStage) {
+        primaryStage.close();
     }
 
     private void refreshTable(TableView<Product> table, ProductManager productManager) {

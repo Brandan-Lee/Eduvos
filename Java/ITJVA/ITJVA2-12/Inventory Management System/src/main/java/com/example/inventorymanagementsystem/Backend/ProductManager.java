@@ -42,7 +42,6 @@ public class ProductManager {
     public boolean updateProduct(int productId, Product updatedProduct) {
         for (Product product : products) {
             if (product.getProductId() == productId) {
-                product.setProductId(productId);
                 return true;
             }
         }
