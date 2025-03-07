@@ -1,18 +1,15 @@
 package com.example.inventorymanagementsystem.Backend;
 
-import java.util.Currency;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Product {
 
-    //Declaration of variables to build the class
-    private int quantity;
-    private String productId, name;
-    private Currency price;
-    private Date createdAt, updatedAt;
+    private int quantity, productId;
+    private String name;
+    private double price;
+    private LocalDate createdAt, updatedAt;
 
-    //create the constructor for the class
-    public Product(String productId, String name, int quantity, Currency price, Date createdAt, Date updatedAt) {
+    public Product(int productId, String name, int quantity, double price, LocalDate createdAt, LocalDate updatedAt) {
         this.productId = productId;
         this.name = name;
         this.quantity = quantity;
@@ -21,13 +18,11 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    //Public getter and setter methods to access all the private variables
-
-    public String getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
@@ -43,32 +38,35 @@ public class Product {
         return quantity;
     }
 
-    public void setQuantity(int quantity)  {
+    public int setQuantity(int quantity) {
         this.quantity = quantity;
+        return quantity;
     }
 
-    public Currency getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Currency price) {
+    public double setPrice(double price) {
         this.price = price;
+        return price;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public LocalDate setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+        return createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public LocalDate setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+        return updatedAt;
     }
-
 }

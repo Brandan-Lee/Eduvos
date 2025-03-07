@@ -1,46 +1,65 @@
 package com.example.inventorymanagementsystem.Backend;
 
+import com.example.inventorymanagementsystem.Frontend.CustomAlerts;
 import java.util.ArrayList;
 
 public class ProductManager {
 
     //I am using an ArrayList due to the fact that we won't be taught the hashmap datastructure during this module
+    private final ArrayList<Product> products;
 
-    public ArrayList<Product> products;
+    public ProductManager() {
+        this.products = new ArrayList<>();
+    }
+
+    public boolean productExists(int productId) {
+        for (Product product : products) {
+            if (product.getProductId() == productId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     //This function allows the user to add a product if the product does not exist yet
-    public void addProduct(Product product) {
-        if (products.contains(product.getProductId())) {
-            System.out.println("The following product ID " + product.getProductId() + " already exists");
-        } else {
+    public boolean addProduct(Product product) {
+
+        if (!productExists(product.getProductId())) {
             products.add(product);
-            product.getCreatedAt();
-            System.out.println("The product has been added successfully");
+            return true;
         }
+
+        return false;
     }
 
     //This function will return all the products to the user
     public ArrayList<Product> viewProducts() {
-        return new ArrayList<Product>(products);
+        return products;
     }
 
     //This function allows the user to update the product details if the product id does exist
-    public void updateProduct(String productId, Product updatedProduct) {
-        if (products.contains(productId)) {
-            products.set(products.indexOf(productId), updatedProduct);
-            System.out.println("The product has been updated successfully");
-        } else {
-            System.out.println("The following product ID " + productId + " already exists");
+    public boolean updateProduct(int productId, Product updatedProduct) {
+        for (Product product : products) {
+            if (product.getProductId() == productId) {
+                product.setProductId(productId);
+                return true;
+            }
         }
+
+        return false;
     }
 
     //This function deletes the product from the products arraylist if the product ID does exist
-    public void deleteProduct(String productId) {
-        if (products.contains(productId)) {
-            products.remove(productId);
-            System.out.println("This product has been removed successfully");
-        } else {
-            System.out.println("The following product ID " + productId + " does not exist");
+    public boolean deleteProduct(int productId) {
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getProductId() == productId) {
+                products.remove(i);
+                return true;
+            }
         }
+
+        return false;
     }
+
 }
