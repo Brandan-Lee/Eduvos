@@ -30,7 +30,7 @@ public class CustomAlerts {
         return grid;
     }
 
-    private Product findProduct(int productId) {
+    private void findProduct(int productId) {
         for (Product p : products) {
             if (p.getProductId() == productId) {
                 product = p;
@@ -38,8 +38,6 @@ public class CustomAlerts {
                 product = null;
             }
         }
-
-        return product;
     }
 
     public void showAndConfigureAlert(Alert alert, String title, String headerText, TextField txtInput) {
