@@ -1,23 +1,30 @@
+//This class was created to answer QUESTION 2 of the project
+
 package com.example.inventorymanagementsystem.Backend;
 
 import java.time.LocalDate;
 
 public class Product {
 
+    //These are the private attributes of the Product class
     private int quantity, productId;
     private String name;
     private double price;
     private LocalDate createdAt, updatedAt;
 
+    //Create the constructor for the class to store the product details
     public Product(int productId, String name, int quantity, double price, LocalDate createdAt, LocalDate updatedAt) {
+
         this.productId = productId;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+
     }
 
+    //Public getter and setter methods in order to interact with the classes private attributes
     public int getProductId() {
         return productId;
     }
@@ -38,35 +45,31 @@ public class Product {
         return quantity;
     }
 
-    public int setQuantity(int quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
-        return quantity;
     }
 
     public double getPrice() {
         return price;
     }
 
-    public double setPrice(double price) {
+    public void setPrice(double price) {
         this.price = price;
-        return price;
     }
 
     public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDate setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
-        return createdAt;
     }
 
     public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public LocalDate setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
-        return updatedAt;
     }
 }

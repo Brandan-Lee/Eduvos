@@ -1,3 +1,5 @@
+//This class was created to answer QUESTION 1 and QUESTION 3
+
 package com.example.inventorymanagementsystem.Frontend;
 
 import com.example.inventorymanagementsystem.Backend.Product;
@@ -11,23 +13,26 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.time.LocalDate;
 
 public class AddProductView extends Application {
 
+    //Private attributes of the AddProductView class
     private final ProductManager productManager;
     private final ValidatingFields validation = new ValidatingFields();
     private Product product;
     private int count = 1;
 
+    //Constructor of the class
     public AddProductView(ProductManager productManager) {
         this.productManager = productManager;
     }
 
+    //This method displays the main GUI of the class
     @Override
     public void start(Stage primaryStage) throws IOException {
+
         GridPane grid = createMainLayout(primaryStage);
 
         //Create the scene for the program
@@ -35,10 +40,14 @@ public class AddProductView extends Application {
         primaryStage.setTitle("Add Product");
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
+    //This method displays the main layout of the GUI
     private GridPane createMainLayout(Stage primaryStage) {
+
         CustomAlerts alert = new CustomAlerts(productManager);
+
         //GUI Layout Components and UI control initialization
         final Label lblName = new Label("Name:");
         TextField txtName = new TextField();
@@ -74,11 +83,17 @@ public class AddProductView extends Application {
         return grid;
     }
 
+    //This method adds the product to the ProductManager class. Answers QUESTION 3
     private void addProduct(TextField txtName, TextField txtQuantity, TextField txtPrice, CustomAlerts alert) {
+
         try {
+
+            //Validate all of the text fields in the GUI
             validation.validateName(txtName, alert);
             validation.validateNumber(txtQuantity, alert);
             validation.validatePrice(txtPrice, alert);
+
+            //Get the product details
             int productId = count;
             String name = txtName.getText();
             int quantity = Integer.parseInt(txtQuantity.getText());
@@ -86,7 +101,9 @@ public class AddProductView extends Application {
             LocalDate created = LocalDate.now();
             LocalDate updated = null;
 
+            //Add the product to the Product class. Still add it if there is no products. Answers QUESTION 3
             if (product == null) {
+
                 product = new Product(productId, name, quantity, price, created, updated);
                 product.setProductId(productId);
                 product.setName(name);
@@ -94,27 +111,34 @@ public class AddProductView extends Application {
                 product.setPrice(price);
                 product.setCreatedAt(created);
                 product.setUpdatedAt(updated);
+
             } else {
                 product = new Product(productId, name, quantity, price, created, updated);
             }
 
+            //Add the product to the ProductManager class. Answers QUESTION 3
             if (productManager.addProduct(product)) {
                 alert.showProductInfoAlert("The product has been successfully added");
                 clearAddFields(txtName, txtQuantity, txtPrice);
                 count++;
             }
+
         } catch (RuntimeException ex) {
             alert.errorAlert("There was a problem adding the product. Please check your configuration");
         }
+
     }
 
+    //This method clears all the fields in the QUI once a product has been added successfully
     private void clearAddFields(TextField txtQuantity, TextField txtPrice, TextField txtName) {
         txtName.setText("");
         txtQuantity.setText("");
         txtPrice.setText("");
     }
 
+    //This method adds the product to the ProductManager class. Answers Question 3
     private void buttonControl(Button addBtn, Button closeBtn, TextField txtName, TextField txtQuantity, TextField txtPrice, CustomAlerts alert, Stage primaryStage) {
+
         addBtn.setOnAction(e -> {
             addProduct(txtName, txtQuantity, txtPrice, alert);
         });
@@ -122,6 +146,7 @@ public class AddProductView extends Application {
         closeBtn.setOnAction(e -> {
             primaryStage.close();
         });
+
     }
 
 }
