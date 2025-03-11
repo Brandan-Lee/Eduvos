@@ -78,20 +78,19 @@ public class AddProductView extends Application {
         btnBox.setPadding(new Insets(0,10,0,0));
         grid.add(btnBox,1, 3);
 
+        //This method is called to handle all the GUI manipulation
         buttonControl(addBtn, closeBtn, txtName, txtQuantity, txtPrice, alert, primaryStage);
 
         return grid;
     }
 
     //This method adds the product to the ProductManager class. Answers QUESTION 3
-    private void addProduct(TextField txtName, TextField txtQuantity, TextField txtPrice, CustomAlerts alert) {
+    private void addProduct(TextField txtName, TextField txtQuantity, TextField txtPrice, CustomAlerts alert, Stage parent) {
 
         try {
-
-            //Validate all of the text fields in the GUI
-            validation.validateName(txtName, alert);
-            validation.validateNumber(txtQuantity, alert);
-            validation.validatePrice(txtPrice, alert);
+            if (!validation.validateName(txtName, alert, parent) || !validation.validateNumber(txtQuantity, alert, parent) || !validation.validatePrice(txtPrice, alert, parent)) {
+                return;
+            }
 
             //Get the product details
             int productId = count;
@@ -103,7 +102,6 @@ public class AddProductView extends Application {
 
             //Add the product to the Product class. Still add it if there is no products. Answers QUESTION 3
             if (product == null) {
-
                 product = new Product(productId, name, quantity, price, created, updated);
                 product.setProductId(productId);
                 product.setName(name);
@@ -111,41 +109,37 @@ public class AddProductView extends Application {
                 product.setPrice(price);
                 product.setCreatedAt(created);
                 product.setUpdatedAt(updated);
-
             } else {
                 product = new Product(productId, name, quantity, price, created, updated);
             }
 
             //Add the product to the ProductManager class. Answers QUESTION 3
             if (productManager.addProduct(product)) {
-                alert.showProductInfoAlert("The product has been successfully added");
+                alert.showProductInfoAlert("The product has been successfully added", parent);
                 clearAddFields(txtName, txtQuantity, txtPrice);
                 count++;
             }
-
         } catch (RuntimeException ex) {
-            alert.errorAlert("There was a problem adding the product. Please check your configuration");
+            alert.errorAlert("There was a problem adding the product. Please check your configuration", parent);
         }
 
     }
 
     //This method clears all the fields in the QUI once a product has been added successfully
     private void clearAddFields(TextField txtQuantity, TextField txtPrice, TextField txtName) {
+        
         txtName.setText("");
         txtQuantity.setText("");
         txtPrice.setText("");
+        
     }
 
     //This method adds the product to the ProductManager class. Answers Question 3
     private void buttonControl(Button addBtn, Button closeBtn, TextField txtName, TextField txtQuantity, TextField txtPrice, CustomAlerts alert, Stage primaryStage) {
 
-        addBtn.setOnAction(e -> {
-            addProduct(txtName, txtQuantity, txtPrice, alert);
-        });
+        addBtn.setOnAction(e -> addProduct(txtName, txtQuantity, txtPrice, alert, primaryStage));
 
-        closeBtn.setOnAction(e -> {
-            primaryStage.close();
-        });
+        closeBtn.setOnAction(e -> primaryStage.close());
 
     }
 

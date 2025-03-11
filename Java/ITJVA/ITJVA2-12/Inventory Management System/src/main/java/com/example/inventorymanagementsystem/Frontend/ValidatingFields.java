@@ -3,6 +3,7 @@
 package com.example.inventorymanagementsystem.Frontend;
 
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class ValidatingFields {
 
@@ -27,59 +28,63 @@ public class ValidatingFields {
     }
 
     //This method validates the product ID text field. Checks if it is empty and if it is only a number. Displays valid error alerts
-    public void validateID(TextField txt, CustomAlerts alert) {
+    public boolean validateID(TextField txt, CustomAlerts alert, Stage parent) {
 
         if (isNotEmpty(txt)) {
-            alert.errorAlert("The product ID text field is empty.");
+            alert.errorAlert("The product ID text field is empty.", parent);
+            return false;
         } else if (!isNumber(txt)) {
-
-            alert.errorAlert("Product ID input can only contain numbers. Please try again.");
+            alert.errorAlert("Product ID input can only contain numbers. Please try again.", parent);
             txt.setText("");
-
+            return false;
         }
 
+        return true;
     }
 
     //This method validates the name text field. Checks if it is empty and if it is only a string. Displays valid error alerts
-    public void validateName(TextField txt, CustomAlerts alert) {
+    public boolean validateName(TextField txt, CustomAlerts alert, Stage parent) {
 
         if (isNotEmpty(txt)) {
-            alert.errorAlert("The name text field is empty.");
+            alert.errorAlert("The name text field is empty.", parent);
+            return false;
         } else if (!isString(txt)) {
-
-            alert.errorAlert("Name input can only contain letters. Please try again.");
+            alert.errorAlert("Name input can only contain letters. Please try again.", parent);
             txt.setText("");
-
+            return false;
         }
 
+        return true;
     }
 
-    //This method validates the quantity text field. Checks if it is empty and if it is only a integer. Displays valid error alerts
-    public void validateNumber(TextField txt, CustomAlerts alert) {
+    //This method validates the quantity text field. Checks if it is empty and if it is only an integer. Displays valid error alerts
+    public boolean validateNumber(TextField txt, CustomAlerts alert, Stage parent) {
 
         if (isNotEmpty(txt)) {
-            alert.errorAlert("The quantity text field is empty.");
+            alert.errorAlert("The quantity text field is empty.", parent);
+            return false;
         } else if (!isNumber(txt)) {
-
-            alert.errorAlert("Quantity input can only contain numbers. Please try again.");
+            alert.errorAlert("Quantity input can only contain numbers. Please try again.", parent);
             txt.setText("");
-
+            return false;
         }
 
+        return true;
     }
 
     //This method validates the price text field. Checks if it is empty and if it is only a double. Displays valid error alerts
-    public void validatePrice(TextField txt, CustomAlerts alert) {
+    public boolean validatePrice(TextField txt, CustomAlerts alert, Stage parent) {
 
         if (isNotEmpty(txt)) {
-            alert.errorAlert("The price text field is empty.");
+            alert.errorAlert("The price text field is empty.", parent);
+            return false;
         } else if (!isCurrency(txt)) {
-
-            alert.errorAlert("Price input can only contain numbers and a decimal point. Please try again");
+            alert.errorAlert("Price input can only contain numbers and a decimal point. Please try again", parent);
             txt.setText("");
-
+            return false;
         }
 
+        return true;
     }
 
 }

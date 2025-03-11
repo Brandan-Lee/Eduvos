@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -21,8 +22,9 @@ import java.time.LocalDate;
 public class InventoryManagementSystem extends Application {
 
     //Private attributes of the InventoryManagementSystem class
-    private ProductManager productManager;
-    private CustomAlerts alerts;
+    private final ProductManager productManager;
+    private final CustomAlerts alerts;
+    private int counter = 0;
 
     //This is the constructor of the class
     public InventoryManagementSystem() {
@@ -67,6 +69,7 @@ public class InventoryManagementSystem extends Application {
         TableColumn<Product, LocalDate> colUpdatedAt = new TableColumn<>("Updated");
         colUpdatedAt.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
 
+        //Add the column headers as well as the data in the product class
         tblProducts.getColumns().addAll(colId, colName, colQuantity, colPrice, colCreatedAt, colUpdatedAt);
 
         return tblProducts;
@@ -124,91 +127,97 @@ public class InventoryManagementSystem extends Application {
     //This method controls the manipulation of the GUI. Answers QUESTION 3
     private void buttonControl(Button addBtn, Button updateBtn, Button deleteBtn, Button viewBtn, Button closeBtn, TableView<Product> products, AddProductView addView, Stage primaryStage) {
 
-        addBtn.setOnAction(e -> {
-            addProduct(products, addView, updateBtn, deleteBtn, viewBtn);
-            enableButtons(updateBtn, deleteBtn, viewBtn);
-        });
+        addBtn.setOnAction(e -> addProduct(products, addView, updateBtn, deleteBtn, viewBtn, primaryStage));
 
         updateBtn.setOnAction(e -> {
-            updateProduct(products);
+            updateProduct(products, primaryStage);
+            resetCounter(viewBtn);
         });
 
         deleteBtn.setOnAction(e -> {
-            deleteProduct(products);
+            deleteProduct(products, primaryStage);
+            resetCounter(viewBtn);
         });
 
         //This button links QUESTION 3 to QUESTION 1
-        viewBtn.setOnAction(e -> {
-            viewProducts(products, viewBtn);
-        });
+        viewBtn.setOnAction(e -> viewProducts(products, viewBtn, primaryStage));
 
-        closeBtn.setOnAction(e -> {
-            handleClose(primaryStage);
-        });
+        closeBtn.setOnAction(e -> handleClose(primaryStage));
 
     }
 
     //This method adds the product to the ProductManager class based on conditions. Answers QUESTION 3
-    private void addProduct(TableView<Product> products, AddProductView addView, Button updateBtn, Button deleteBtn, Button viewBtn) {
+    private void addProduct(TableView<Product> products, AddProductView addView, Button updateBtn, Button deleteBtn, Button viewBtn, Stage parent) {
 
         try {
-
-            Stage addStage = new Stage();
-            addView.start(addStage);
-
-            //Refresh the table once a product has been added successfully.
-            addStage.setOnHiding(event -> {
+            //this opens the addProduct view and ensures that the inventory management system is the primary stage and the addview stage is the child
+            //this is to ensure that the user can't open multiple windows at the same time
+            openNewWindow("Add new Product", addView, parent, () -> {
+                //Refresh the table once a product has been added successfully.
                 refreshTable(products, productManager);
-            });
 
-            //Enable the buttons once a product has been added
-            enableButtons(updateBtn, deleteBtn, viewBtn);
+                //Enable the buttons once a product has been added
+                if (!productManager.viewProducts().isEmpty()) {
+                    enableButtons(updateBtn, deleteBtn, viewBtn);
+                }
+            });
         } catch (IOException ex) {
-            alerts.errorAlert("There was a problem loading the Add Product view. Please check your configuration.");
+            alerts.errorAlert("There was a problem loading the Add Product view. Please check your configuration.", parent);
         }
 
     }
 
     //This method updates the product in the ProductManager class. Answers QUESTION 3
-    private void updateProduct(TableView<Product> products) {
+    private void updateProduct(TableView<Product> products, Stage stage) {
 
         try {
-            alerts.showProductIdConfAlert();
+            alerts.showProductIdConfAlert(stage);
 
             //Refresh the table once a product has been updated successfully.
             refreshTable(products, productManager);
         } catch (RuntimeException ex) {
-            alerts.errorAlert("There was an error loading the Update Product view. Please check your configuration.");
+            alerts.errorAlert("There was an error loading the Update Product view. Please check your configuration.", stage);
         }
 
     }
 
     //This method deletes the product in the ProductManager class. Answers QUESTION 3
-    private void deleteProduct(TableView<Product> products) {
+    private void deleteProduct(TableView<Product> products, Stage parent) {
 
         try {
-
-            alerts.showProductDeleteConfAlert();
+            alerts.showProductDeleteConfAlert(parent);
             refreshTable(products, productManager);
-
         } catch (RuntimeException ex) {
-            alerts.errorAlert("There was an error loading the Delete Product view. Please check your configuration.");
+            alerts.errorAlert("There was an error loading the Delete Product view. Please check your configuration.", parent);
         }
 
     }
 
     //This method allows the user to the view the Products that have been added to the ProductManager class. Answers QUESTION 3
     //The view products button can only be pressed once and then the button will be deactived
-    private void viewProducts(TableView<Product> products, Button viewBtn) {
+    private void viewProducts(TableView<Product> products, Button viewBtn, Stage parent) {
 
         try {
+            if (counter == 0) {
+                //Refresh the table to view the products that have been added to the ProductManager class
+                refreshTable(products, productManager);
 
-            //Refresh the table to view the products that have been added to the ProductManager class
-            refreshTable(products, productManager);
+                //Button has been pressed, so increase the counter and disable the button
+                counter++;
 
+                viewBtn.setDisable(true);
+            }
         } catch (RuntimeException ex) {
-            alerts.errorAlert("There was an error updating the table. Please check your configuration.");
+            alerts.errorAlert("There was an error updating the table. Please check your configuration.", parent);
         }
+
+    }
+
+    //This method will reset the counter for the view button
+    private void resetCounter(Button viewBtn) {
+
+        counter = 0;
+        viewBtn.setDisable(false);
 
     }
 
@@ -224,4 +233,29 @@ public class InventoryManagementSystem extends Application {
         table.getItems().addAll(productManager.viewProducts());
 
     }
+
+    //This method allows the user to open a new window, while keeping the new window the child stage and the ims window the parent stage
+    //it ensures that the user can't open multiple windows at the same time
+    private void openNewWindow(String title, AddProductView add, Stage parent, Runnable onclose) throws IOException {
+
+        Stage newStage = new Stage();
+
+        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initOwner(parent);
+        newStage.setTitle(title);
+
+        add.start(newStage);
+
+        //Set the new pages position to the middle of the parent stage
+        double centerXPosition = parent.getX() + (parent.getWidth() - newStage.getWidth()) / 2;
+        double centerYPosition = parent.getY() + (parent.getHeight() - newStage.getHeight()) / 2;
+        newStage.setX(centerXPosition);
+        newStage.setY(centerYPosition);
+
+        newStage.setOnHiding(event -> onclose.run());
+
+        newStage.show();
+
+    }
+
 }
