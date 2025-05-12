@@ -22,6 +22,11 @@ public class CustomAlerts {
     private final ValidatingFields validation = new ValidatingFields();
     private final ArrayList<Product> products;
     private Product product;
+    private final String ALERT_TYPE_INPUT = "Input";
+    private final String ALERT_TYPE_ERROR = "Error";
+    private final String ALERT_TYPE_WARNING = "Warning";
+    private final String ALERT_TYPE_MESSAGE = "Message";
+
 
     //This is the constructor of the class
     public CustomAlerts(ProductManager productManager) {
@@ -56,40 +61,24 @@ public class CustomAlerts {
 
     }
 
-    //This method is to configure all the alerts used during the update and delete operations
-    public void showAndConfigureAlert(Alert alert, String title, String headerText, TextField txtInput) {
-
+    //This method is used to configure the alert that is needed for the gui
+    private void configureAlert(Alert alert, String title, String headerText, Stage parent, TextField txtInput) {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
-        alert.getDialogPane().setContent(createGrid(txtInput));
         alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
-
-    }
-
-    //This method shows the confirmation alerts when updating and deleting products from the ProductManager class. These alerts are the children of the parent ims class
-    //This is done to enforce that users can't open multiple windows
-    public void showConfirmationAlert(String title, String header, TextField txtInput, Stage parent, Runnable onOk) {
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
         if (txtInput != null) {
             GridPane grid = createGrid(txtInput);
-            showAndConfigureAlert(alert, title, header, txtInput);
+            alert.getDialogPane().setContent(createGrid(txtInput));
         }
 
-        //set the alerts to be the child of the inventorymanagementsystem class so that the user can't click outside the parent stage
         if (parent != null) {
-            alert.initOwner(parent);
-            alert.initModality(Modality.WINDOW_MODAL);
-
-            //Set the new alerts position to the middle of the parent stage
-            double centerXPosition = parent.getX() + (parent.getWidth() - alert.getWidth()) / 2;
-            double centerYPosition = parent.getY() + (parent.getHeight() - alert.getHeight()) / 2;
-
-            alert.setX(centerXPosition);
-            alert.setY(centerYPosition);
+            positionAlert(alert, parent);
         }
+    }
 
+    //This method handles the response that is thrown from the alert
+    private void handleAlertResponses(Alert alert, Runnable onOk) {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 onOk.run();
@@ -97,188 +86,184 @@ public class CustomAlerts {
                 alert.close();
             }
         });
+    }
+
+    //This method is to configure all the alerts used during the update and delete operations
+    private void showAndConfigureAlert(Alert.AlertType type, String title, String headerText, Stage parent, TextField txtInput, Runnable onOk) {
+
+        Alert alert = new Alert(type);
+        configureAlert(alert, title, headerText, parent, txtInput);
+        handleAlertResponses(alert, onOk);
 
     }
 
+    //This method helps to position the alert to the middle of the parent GUI
+    private void positionAlert(Alert alert, Stage parent) {
+
+        alert.initOwner(parent);
+        alert.initModality(Modality.WINDOW_MODAL);
+
+        //Set the new alerts position to the middle of the parent stage
+        double centerXPosition = parent.getX() + (parent.getWidth() - alert.getWidth()) / 2;
+        double centerYPosition = parent.getY() + (parent.getHeight() - alert.getHeight()) / 2;
+
+        alert.setX(centerXPosition);
+        alert.setY(centerYPosition);
+
+    }
+
+    //Show the alert when an error has occurred during an operation
+    public void errorAlert(String message, Stage parent) {
+
+        showAndConfigureAlert(Alert.AlertType.ERROR, ALERT_TYPE_ERROR, message, parent, null, () -> {});
+
+    }
+
+    //Show the alert that the product has been deleted or updated successfully
+    public void productInfo(String message, Stage parent) {
+
+        showAndConfigureAlert(Alert.AlertType.INFORMATION, ALERT_TYPE_MESSAGE, message, parent, null, () -> {});
+
+    }
+
+    //This method is used to validate the input of the texttfields
+    private boolean validateInput(TextField txtInput, String type, Stage parent) {
+
+        boolean isValid;
+
+        switch (type) {
+            case ("ID"):
+                isValid = validation.validateID(txtInput, this, parent);
+                break;
+            case ("Quantity"):
+                isValid = validation.validateQuantity(txtInput, this, parent);
+                break;
+            case ("Price"):
+                isValid = validation.validatePrice(txtInput, this, parent);
+                break;
+            default:
+                System.out.println("Validation error: " + type);
+                throw new IllegalArgumentException("Invalid validation type");
+        }
+
+        return isValid;
+    }
+
+    //This method is used to prompt the user to enter input
+    private String promptInput(String title, String headerText, Stage parent, String validationType, String defaultValue) {
+        TextField txtInput = new TextField();
+
+        if (defaultValue != null) {
+            txtInput.setText(defaultValue);
+        }
+
+        final String[] input = {null};
+
+        showAndConfigureAlert(Alert.AlertType.CONFIRMATION, title, headerText, parent, txtInput, () -> {
+            if (validationType != null && !validateInput(txtInput, validationType, parent)) {
+                return;
+            }
+
+            input[0] = txtInput.getText().trim();
+        });
+
+        return input[0];
+    }
+
     //This method displays the product ID update alert
-    public void showProductIdConfAlert(Stage stage) {
+    public void updateProductId(Stage parent) {
+        String input = promptInput(ALERT_TYPE_INPUT, "Enter product ID to update: ", parent, "ID", null);
 
-        while (true) {
-            TextField txtInput = new TextField();
-            showConfirmationAlert("Input", "Enter Product ID to update: ", txtInput, stage, () -> {
-                //Validate the text fields input for numbers only and to see if it is empty.
-                //Answers QUESTION 3
-                if (!validation.validateID(txtInput, this, stage)) {
-                    return;
-                }
+        if (input == null) {
+            return;
+        }
 
-                int productId = Integer.parseInt(txtInput.getText());
-                findProduct(productId);
+        int productId = Integer.parseInt(input);
+        findProduct(productId);
 
-                //show the update product ID alert again if the product id has not been found
-                if (product != null) {
-                    showQuantityConfAlert(stage);
-                } else {
-                    errorAlert("This product ID does not exist. Please try again", stage);
-                    return;
-                }
-            });
-
-            break;
+        if (product != null) {
+            updateQuantity(parent);
+        } else {
+            errorAlert("This product ID does not exist. Please try again", parent);
         }
 
     }
 
     //This method displays the quantity update alert
-    public void showQuantityConfAlert(Stage stage) {
+    private void updateQuantity(Stage parent) {
+        String input = promptInput(ALERT_TYPE_INPUT, "Enter new quantity: ", parent, "Quantity", String.valueOf(product.getQuantity()));
 
-        TextField txtInput = new TextField();
-        txtInput.setText(Integer.toString(product.getQuantity()));
-        showConfirmationAlert("Input", "Enter New Quantity", txtInput, stage, () -> {
+        if (input == null) {
+            return;
+        }
 
-            //Validate the text fields input for numbers only and to see if it is empty.
-            //Answers QUESTION 3
-            if (!validation.validateNumber(txtInput, this, stage)) {
-                return;
-            }
-
-            //Link backend to frontend. Answers QUESTION 3
-            product.setQuantity(Integer.parseInt(txtInput.getText()));
-
-            showPriceConfAlert(stage);
-        });
+        //Link backend to frontend. Answers QUESTION 3
+        product.setQuantity(Integer.parseInt(input));
+        updatePrice(parent);
 
     }
 
     //This method displays the price update alert. Handles the updating of the product in ProductManager class
-    public void showPriceConfAlert(Stage stage) {
+    private void updatePrice(Stage parent) {
 
-        TextField txtInput = new TextField();
-        txtInput.setText(Double.toString(product.getPrice()));
-        showConfirmationAlert("Input", "Enter new price: ", txtInput, stage, () -> {
+        String input = promptInput(ALERT_TYPE_INPUT, "Enter new price: ", parent, "Price", String.valueOf(product.getPrice()));
 
-            try {
-                //Validate the text fields input for price only and to see if it is empty.
-                //Answers QUESTION 3
-                if (!validation.validateNumber(txtInput, this, stage)) {
-                    return;
-                }
+        if (input == null) {
+            return;
+        }
 
-                //Link backend to frontend. Answers QUESTION 3
-                product.setPrice(Double.parseDouble(txtInput.getText()));
+        try {
+            //Link backend to frontend. Answers QUESTION 3
+            product.setPrice(Double.parseDouble(input));
 
-                //check to see if the product has been updated
-                if (productManager.updateProduct(product.getProductId(), product)) {
-                    showProductInfoAlert("This product has been successfully updated", stage);
-                    product.setUpdatedAt(LocalDate.now());
-                }
-            } catch (RuntimeException ex) {
-                errorAlert("There was an error. Please try again", stage);
+            //check to see if the product has been updated
+            if (productManager.updateProduct(product.getProductId(), product)) {
+                productInfo("This product has been successfully updated", parent);
+                product.setUpdatedAt(LocalDate.now());
             }
-        });
+        } catch (RuntimeException ex) {
+            System.out.println("Exception updating of product: " + ex.getMessage());
+            errorAlert("There was an error. Please try again", parent);
+        }
 
     }
 
     //This method shows the delete product ID alert
-    public void showProductDeleteConfAlert(Stage stage) {
+    public void deleteProductID(Stage parent) {
 
-        while (true) {
-            TextField txtInput = new TextField();
-            showConfirmationAlert("Input", "Enter product ID to delete: ", txtInput, stage, () -> {
+        String input = promptInput(ALERT_TYPE_INPUT, "Enter product ID to delete: ", parent, "ID", null);
 
-                //Validate the text fields input for numbers only and to see if it is empty.
-                //Answers QUESTION 3
-                if (!validation.validateID(txtInput, this, stage)) {
-                    return;
-                }
-
-                int productId = Integer.parseInt(txtInput.getText());
-                findProduct(productId);
-
-                //show the delete product ID alert again if the product id has not been found
-                if (product != null) {
-                    showDeleteAlertWarning(productId, stage);
-                } else {
-                    errorAlert("This product ID does not exist. Please try again", stage);
-                    return;
-                }
-            });
-
-            break;
+        if (input == null) {
+            return;
         }
 
+        int productId = Integer.parseInt(input);
+        findProduct(productId);
+
+        //show the delete product ID alert again if the product id has not been found
+        if (product != null) {
+            deleteWarning(productId, parent);
+        } else {
+            errorAlert("This product ID does not exist. Please try again", parent);
+        }
 
     }
 
     //This method displays the alert warning if the product ID has been found
-    public void showDeleteAlertWarning(int productId, Stage stage) {
+    private void deleteWarning(int productId, Stage parent) {
 
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText("Are you sure you want to delete this product? ");
-        alert.setTitle("Warning");
-
-        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
-
-        //set the alerts to be the child of the inventorymanagementsystem class so that the user can't click outside the parent stage
-        alert.initOwner(stage);
-        alert.initModality(Modality.WINDOW_MODAL);
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                try {
-                    //check to see if the product has been deleted successfully
-                    if (productManager.deleteProduct(productId)) {
-                        showProductInfoAlert("This product has been deleted successfully", stage);
-                    }
-                } catch (RuntimeException ex) {
-                    errorAlert("There was an error. Please try again", stage);
+        showAndConfigureAlert(Alert.AlertType.WARNING, ALERT_TYPE_WARNING, "Are you sure you want to delete product " + product.getName() + "?", parent, null, () -> {
+            try {
+                //check to see if the product has been deleted successfully
+                if (productManager.deleteProduct(productId)) {
+                    productInfo("This product has been deleted successfully", parent);
                 }
-            } else {
-                alert.close();
+            } catch (RuntimeException ex) {
+                System.out.println("Exception deletion of product: " + ex.getMessage());
+                errorAlert("There was an error. Please try again", parent);
             }
         });
 
     }
 
-    //Show the alert that the product has been deleted or updated successfully
-    public void showProductInfoAlert(String message, Stage stage) {
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(message);
-        alert.setTitle("Message");
-
-        alert.getButtonTypes().setAll(ButtonType.OK);
-
-        //set the alerts to be the child of the inventorymanagementsystem class so that the user can't click outside the parent stage
-        alert.initOwner(stage);
-        alert.initModality(Modality.WINDOW_MODAL);
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                alert.close();
-            }
-        });
-
-    }
-
-    //Show the alert when an error has occurred during an operation
-    public void errorAlert(String message, Stage stage) {
-
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(message);
-        alert.setTitle("Error");
-
-        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
-
-        //set the alerts to be the child of the inventorymanagementsystem class so that the user can't click outside the parent stage
-        alert.initOwner(stage);
-        alert.initModality(Modality.WINDOW_MODAL);
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                alert.close();
-            }
-        });
-
-    }
 }

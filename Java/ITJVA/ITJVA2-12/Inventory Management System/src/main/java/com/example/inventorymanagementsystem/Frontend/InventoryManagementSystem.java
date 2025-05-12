@@ -162,6 +162,7 @@ public class InventoryManagementSystem extends Application {
                 }
             });
         } catch (IOException ex) {
+            System.out.println("Error opening add page " + ex.getMessage());
             alerts.errorAlert("There was a problem loading the Add Product view. Please check your configuration.", parent);
         }
 
@@ -171,11 +172,12 @@ public class InventoryManagementSystem extends Application {
     private void updateProduct(TableView<Product> products, Stage stage) {
 
         try {
-            alerts.showProductIdConfAlert(stage);
+            alerts.updateProductId(stage);
 
             //Refresh the table once a product has been updated successfully.
             refreshTable(products, productManager);
         } catch (RuntimeException ex) {
+            System.out.println("Error opening update view " + ex.getMessage());
             alerts.errorAlert("There was an error loading the Update Product view. Please check your configuration.", stage);
         }
 
@@ -185,9 +187,10 @@ public class InventoryManagementSystem extends Application {
     private void deleteProduct(TableView<Product> products, Stage parent) {
 
         try {
-            alerts.showProductDeleteConfAlert(parent);
+            alerts.deleteProductID(parent);
             refreshTable(products, productManager);
         } catch (RuntimeException ex) {
+            System.out.println("Error opening delete view " + ex.getMessage());
             alerts.errorAlert("There was an error loading the Delete Product view. Please check your configuration.", parent);
         }
 
@@ -208,6 +211,7 @@ public class InventoryManagementSystem extends Application {
                 viewBtn.setDisable(true);
             }
         } catch (RuntimeException ex) {
+            System.out.println("Error refreshing the table " + ex.getMessage());
             alerts.errorAlert("There was an error updating the table. Please check your configuration.", parent);
         }
 
@@ -236,7 +240,7 @@ public class InventoryManagementSystem extends Application {
 
     //This method allows the user to open a new window, while keeping the new window the child stage and the ims window the parent stage
     //it ensures that the user can't open multiple windows at the same time
-    private void openNewWindow(String title, AddProductView add, Stage parent, Runnable onclose) throws IOException {
+    private void openNewWindow(String title, AddProductView add, Stage parent, Runnable onClose) throws IOException {
 
         Stage newStage = new Stage();
 
@@ -252,7 +256,7 @@ public class InventoryManagementSystem extends Application {
         newStage.setX(centerXPosition);
         newStage.setY(centerYPosition);
 
-        newStage.setOnHiding(event -> onclose.run());
+        newStage.setOnHiding(event -> onClose.run());
 
         newStage.show();
 

@@ -22,7 +22,7 @@ public class AddProductView extends Application {
     private final ProductManager productManager;
     private final ValidatingFields validation = new ValidatingFields();
     private Product product;
-    private int count = 1;
+    private static final int SPACING = 20;
 
     //Constructor of the class
     public AddProductView(ProductManager productManager) {
@@ -57,16 +57,27 @@ public class AddProductView extends Application {
         final TextField txtPrice = new TextField();
         final Button addBtn = new Button("Add");
         final Button closeBtn = new Button("Close");
+
         final HBox btnBox = new HBox(addBtn, closeBtn);
+        //Add the spacing to the button box
+        btnBox.setSpacing(SPACING);
+
+        GridPane grid = createGrid(txtName, lblName, txtQuantity, lblQuantity, txtPrice, lblPrice, btnBox);
+
+        //This method is called to handle all the GUI manipulation
+        buttonControl(addBtn, closeBtn, txtName, txtQuantity, txtPrice, alert, primaryStage);
+
+        return grid;
+    }
+
+    //This method creates the grid needed for the GUI
+    private GridPane createGrid(TextField txtName, Label lblName, TextField txtQuantity, Label lblQuantity, TextField txtPrice, Label lblPrice, HBox btnBox) {
         GridPane grid = new GridPane();
 
-        //Add the spacing to the button box
-        btnBox.setSpacing(30);
-
-        //Add padding to the grid
+        //Add padding to the grid and spacing
         grid.setPadding(new Insets(10));
-        grid.setVgap(20);
-        grid.setHgap(20);
+        grid.setVgap(SPACING);
+        grid.setHgap(SPACING);
 
         //Add the labels and the textFields to the grid pane
         grid.add(lblName, 0, 0);
@@ -78,9 +89,6 @@ public class AddProductView extends Application {
         btnBox.setPadding(new Insets(0,10,0,0));
         grid.add(btnBox,1, 3);
 
-        //This method is called to handle all the GUI manipulation
-        buttonControl(addBtn, closeBtn, txtName, txtQuantity, txtPrice, alert, primaryStage);
-
         return grid;
     }
 
@@ -88,38 +96,33 @@ public class AddProductView extends Application {
     private void addProduct(TextField txtName, TextField txtQuantity, TextField txtPrice, CustomAlerts alert, Stage parent) {
 
         try {
-            if (!validation.validateName(txtName, alert, parent) || !validation.validateNumber(txtQuantity, alert, parent) || !validation.validatePrice(txtPrice, alert, parent)) {
+            if (!validation.validateName(txtName, alert, parent) ||
+                    !validation.validateQuantity(txtQuantity, alert, parent) ||
+                    !validation.validatePrice(txtPrice, alert, parent)) {
                 return;
             }
 
             //Get the product details
-            int productId = count;
-            String name = txtName.getText();
-            int quantity = Integer.parseInt(txtQuantity.getText());
-            double price = Double.parseDouble(txtPrice.getText());
-            LocalDate created = LocalDate.now();
-            LocalDate updated = null;
+            int productID = productManager.viewProducts().size() + 1;
 
             //Add the product to the Product class. Still add it if there is no products. Answers QUESTION 3
-            if (product == null) {
-                product = new Product(productId, name, quantity, price, created, updated);
-                product.setProductId(productId);
-                product.setName(name);
-                product.setQuantity(quantity);
-                product.setPrice(price);
-                product.setCreatedAt(created);
-                product.setUpdatedAt(updated);
-            } else {
-                product = new Product(productId, name, quantity, price, created, updated);
-            }
+            product = new Product(
+                    productID,
+                    txtName.getText(),
+                    Integer.parseInt(txtQuantity.getText()),
+                    Double.parseDouble(txtPrice.getText()),
+                    LocalDate.now(),
+                    null
+            );
 
-            //Add the product to the ProductManager class. Answers QUESTION 3
+            //Add the product to the ProductManager class and show feedback. Answers QUESTION 3
             if (productManager.addProduct(product)) {
-                alert.showProductInfoAlert("The product has been successfully added", parent);
+                alert.productInfo("The product has been successfully added", parent);
                 clearAddFields(txtName, txtQuantity, txtPrice);
-                count++;
+                productID++;
             }
         } catch (RuntimeException ex) {
+            System.out.println("Error adding product " + ex.getMessage());
             alert.errorAlert("There was a problem adding the product. Please check your configuration", parent);
         }
 
