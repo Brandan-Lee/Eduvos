@@ -11,6 +11,7 @@ CREATE TABLE Customers (
 CREATE TABLE Policies (
 	policy_Id int NOT NULL AUTO_INCREMENT UNIQUE,
     policy_type varchar(100) NOT NULL,
+    sum_insured decimal NOT NULL,
     coverage_amount decimal NOT NULL,
     premium_amount decimal NOT NULL,
     customer_id int NOT NULL,

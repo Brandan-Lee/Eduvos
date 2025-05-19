@@ -1,31 +1,33 @@
 
-package BackEnd;
+package BackEnd.JavaWithJDBC.DAL.DTO;
 
 /**
- * @author Brandan-Lee James Sherbrooke eduv4902376
+ * @author brand
  */
 
-public class Policies {
+public class PolicyDTO {
     
-    //these are the private attributes of the policies class
+    //private attributes of the policy table in the database. Foreign key will be added to create the relationship between the customers table and the policies table
     private int policyId;
     private String policyType;
-    private double coverageAmount, premiumAmount;
-    //foreign key to the customer table in the database
+    private double sumInsured, coverageAmount, premiumAmount;
+    
+    //Foreign key
     private int customerId;
     
-    //This is the constructor for the class
-    public Policies(int policyId, String policyType, double coverageAmount, double premiumAmount, int customerId) {
+    //Constructor for the class
+    public PolicyDTO(int policyId, String policyType, double coverageAmount, double premiumAmount, int customerId) {
         
         this.policyId = policyId;
         this.policyType = policyType;
+        this.sumInsured = sumInsured;
         this.coverageAmount = coverageAmount;
         this.premiumAmount = premiumAmount;
         this.customerId = customerId;
         
     }
     
-    //public getter and setter methods for the private attributes
+    //public getter and setter methods for the class
     public int getPolicyId() {
         return policyId;
     }
@@ -40,6 +42,14 @@ public class Policies {
     
     public void setPolicyType(String policyType) {
         this.policyType = policyType;
+    }
+    
+    public double getSumInsured() {
+        return sumInsured;
+    }
+    
+    public void setSumInsured(double sumInsured) {
+        this.sumInsured = sumInsured;
     }
     
     public double getCoverageAmount() {
@@ -58,6 +68,7 @@ public class Policies {
         this.premiumAmount = premiumAmount;
     }
     
+    //public getter and setter for the foreign key that links PolicyDTO with CustomerDTO
     public int getCustomerId() {
         return customerId;
     }
