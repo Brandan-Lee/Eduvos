@@ -20,25 +20,45 @@ public class DatabaseConnectionUtil {
     public static Connection GetConnection() throws SQLException {
         
         try {
+            
             Class.forName(DRIVER);
             Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             
             return con;
+            
         } catch (ClassNotFoundException e) {
+            
+            System.out.println("Connection has not been initiated to the database" + e.getMessage());
             throw new SQLException("There was an error loading the JDBC driver ", e);
+            
         }
         
     }
     
-    //This method is used to terminate the connection if it exists to the database
-    public static void CloseConnection(Connection con) {
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) { 
-                System.out.println("There was an error closing the connection " + e);
+    //This method is used to terminate the connection if it exists to the database, close the prepared
+    public static void CloseConnection(Connection con, PreparedStatement prepStmt, ResultSet result) throws SQLException {
+        
+        try {
+            
+            if (result != null) {
+                result.close();
             }
+            
+            if (prepStmt != null) {
+                prepStmt.close();
+            }
+            
+            if (con != null) {
+                con.close();
+            }
+            
+        } catch (SQLException e) {
+            
+            System.out.println("There was an error closing the connection " + e.getMessage());
+            throw new SQLException("The database can't be closed ", e);
+            
         }
+        
     }
     
 }

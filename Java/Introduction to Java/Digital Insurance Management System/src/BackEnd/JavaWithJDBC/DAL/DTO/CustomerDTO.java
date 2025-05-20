@@ -8,12 +8,12 @@ package BackEnd.JavaWithJDBC.DAL.DTO;
 public class CustomerDTO {
     
     //These are the private attributes of the customer class for the database
-    private int customerId, customerAge, customerNationalId;
-    private String customerName, customerSurname, customerAddress;
+    private int customerId, customerAge;
+    private String customerName, customerSurname, customerAddress, customerNationalId;
     
     
     //This is the constructor of the class
-    public CustomerDTO(int customerId, int customerAge, int customerNationalId, String customerName, String customerSurname, String customerAddress) {
+    public CustomerDTO(int customerId, int customerAge, String customerNationalId, String customerName, String customerSurname, String customerAddress) {
         
         this.customerId = customerId;
         this.customerAge = customerAge;
@@ -41,11 +41,11 @@ public class CustomerDTO {
         this.customerAge = customerAge;
     }
     
-    public int getCustomerNationalId() {
+    public String getCustomerNationalId() {
         return customerNationalId;
     }
     
-    public void setCustomerNationalId(int customerNationalId) {
+    public void setCustomerNationalId(String customerNationalId) {
         this.customerNationalId = customerNationalId;
     }
     

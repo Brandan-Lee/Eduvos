@@ -16,7 +16,7 @@ public class PolicyDTO {
     private int customerId;
     
     //Constructor for the class
-    public PolicyDTO(int policyId, String policyType, double coverageAmount, double premiumAmount, int customerId) {
+    public PolicyDTO(int policyId, String policyType, double sumInsured, double coverageAmount, double premiumAmount, int customerId) {
         
         this.policyId = policyId;
         this.policyType = policyType;

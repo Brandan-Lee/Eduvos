@@ -29,12 +29,20 @@ public class CustomerWithPoliciesDTO {
         this.customer = customer;
     }
     
-    public ArrayList<PolicyDTO> getPolicies() {
+    public List<PolicyDTO> getPolicies() {
         return new ArrayList<>(policies);
     }
     
-    public void setPolicies(ArrayList<PolicyDTO> policies) {
+    public void setPolicies(List<PolicyDTO> policies) {
         this.policies = policies; 
+    }
+    
+    public void addPolicy(PolicyDTO policy) {
+        if (this.policies == null) {
+            this.policies = new ArrayList<>();
+        }
+        
+        this.policies.add(policy);
     }
     
 }

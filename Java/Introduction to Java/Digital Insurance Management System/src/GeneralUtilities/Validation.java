@@ -1,5 +1,5 @@
 
-package General;
+package GeneralUtilities;
 
 /**
  * @author brand
