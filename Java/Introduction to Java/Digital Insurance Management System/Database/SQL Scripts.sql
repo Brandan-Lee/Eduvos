@@ -1,4 +1,4 @@
-CREATE DATABASE `Digital_Insurance_Managment_System`;
+-- CREATE DATABASE `Digital_Insurance_Managment_System`;
 USE `Digital_Insurance_Managment_System`;
 
 CREATE TABLE Customers (
@@ -7,7 +7,7 @@ CREATE TABLE Customers (
     customer_name VARCHAR(50) NOT NULL,
     customer_surname VARCHAR(50) NOT NULL,
     customer_address VARCHAR(255) NOT NULL,
-    customer_age INT NOT NULL,
+    customer_age INT NOT NULL CHECK (customer_age > 0),
     PRIMARY KEY (customer_id)
 );
 
@@ -21,3 +21,7 @@ CREATE TABLE Policies (
     PRIMARY KEY (policy_id),
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 )
+
+SELECT * FROM Customers;
+
+SELECT * FROM policies;

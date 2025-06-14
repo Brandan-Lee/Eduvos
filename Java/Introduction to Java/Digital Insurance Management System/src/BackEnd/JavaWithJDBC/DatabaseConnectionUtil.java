@@ -3,11 +3,6 @@ package BackEnd.JavaWithJDBC;
 
 import java.sql.*;
 
-/**
- *
- * @author brand
- */
-
 public class DatabaseConnectionUtil {
     
     //Atrributes that contain the details for the database
