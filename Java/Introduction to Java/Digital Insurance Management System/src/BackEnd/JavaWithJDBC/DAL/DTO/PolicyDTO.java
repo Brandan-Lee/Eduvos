@@ -32,49 +32,25 @@ public class PolicyDTO {
         return policyId;
     }
     
-    public void setPolicyId(int policyId) {
-        this.policyId = policyId;
-    }
-    
     public String getPolicyType() {
         return policyType;
-    }
-    
-    public void setPolicyType(String policyType) {
-        this.policyType = policyType;
     }
     
     public double getSumInsured() {
         return sumInsured;
     }
     
-    public void setSumInsured(double sumInsured) {
-        this.sumInsured = sumInsured;
-    }
-    
     public double getCoverageAmount() {
         return coverageAmount;
-    }
-    
-    public void setCoverageAmount(double coverageAmount) {
-        this.coverageAmount = coverageAmount;
     }
     
     public double getPremiumAmount() {
         return premiumAmount;
     }
     
-    public void setPremiumAmount(double premiumAmount) {
-        this.premiumAmount = premiumAmount;
-    }
-    
     //public getter and setter for the foreign key that links PolicyDTO with CustomerDTO
     public int getCustomerId() {
         return customerId;
-    }
-    
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
     
 }

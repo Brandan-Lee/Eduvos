@@ -1,0 +1,140 @@
+
+/*set the color for the main grid to be light blue*/
+.main-grid {
+    -fx-background-color : lightblue;
+}
+
+/*set the text color for the main title to be a dark blue*/
+.main-title {
+    
+    -fx-text-fill : darkslateblue;
+    -fx-font-size : 24px;
+    -fx-font-weight : bold;
+    
+}
+
+/*customize all the labels*/
+.labels {
+    
+    -fx-text-fill : black;
+    -fx-font-size : 16px;
+    -fx-font-weight : bold;
+    
+}
+
+.text-fields {
+    
+    -fx-font-size : 16px;
+    -fx-font-weight : normal;
+    -fx-border-color : blue;
+    -fx-border-width : 3px;
+    -fx-border-radius : 5px;
+    -fx-text-fill : rgba(0, 0, 0, 0.5);
+    -fx-background-radius : 5px;
+    
+}
+
+.text-fields:focused {
+    
+    -fx-text-fill : black;
+    -fx-border-color : blueviolet;
+    -fx-border-width : 3px;
+    -fx-border-radius : 5px;
+    -fx-background-radius : 5px;
+     
+}
+
+.buttons, .closeButton {
+    
+    -fx-text-fill : white;
+    -fx-font-size : 14px;
+    -fx-border-color : blueviolet;
+    -fx-border-width : 3px;
+    -fx-border-radius : 5px;
+    -fx-background-color : blue;
+    -fx-font-weight : bold;
+    
+}
+
+.buttons:hover {
+    
+    -fx-background-color : blueviolet;
+    -fx-cursor: hand;
+    
+}
+
+.closeButton:hover {
+    
+    -fx-background-color: red;
+    -fx-cursor: hand;
+    
+}
+
+.combo-box {
+    
+    -fx-text-fill : white !important;
+    -fx-font-size : 16px;
+    -fx-border-color : blueviolet;
+    -fx-border-width : 3px;
+    -fx-border-radius : 5px;
+    -fx-background-color : blue;
+    -fx-font-weight : bold;
+    -fx-cursor : hand;
+    
+}
+
+.combo-box:focused {
+    -fx-background-color : blueviolet;
+}
+
+.combo-box .list-cell {
+    -fx-background-color : blue;
+    -fx-text-fill : white;
+    -fx-font-size : 16px;
+    -fx-font-weight : bold;
+}
+
+.combo-box:focused .list-cell {
+    -fx-background-color : blueviolet;
+}
+
+.combo-box:focused .list-cell:hover {
+    
+    -fx-background-color : purple;
+    -fx-cursor: hand;
+    
+}
+
+.custom-alert-dialog {
+    -fx-background-color : lightblue;
+}
+
+.custom-alert-dialog .label {
+    
+    -fx-text-fill : black;
+    -fx-font-size : 16px;
+    -fx-font-weight : bold;
+    
+}
+
+.custom-alert-dialog .button {
+    
+    -fx-text-fill : white;
+    -fx-font-size : 14px;
+    -fx-border-color : blueviolet;
+    -fx-border-width : 3px;
+    -fx-border-radius : 5px;
+    -fx-background-color : blue;
+    -fx-font-weight : bold;
+    
+}
+
+.custom-alert-dialog .button:hover {
+    
+    -fx-background-color : blueviolet;
+    -fx-cursor : hand;
+    
+}
+
+
+

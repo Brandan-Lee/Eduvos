@@ -29,48 +29,24 @@ public class CustomerDTO {
         return customerId;
     }
     
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-    
     public int getCustomerAge() {
         return customerAge;
-    }
-    
-    public void setCustomerAge(int customerAge) {
-        this.customerAge = customerAge;
     }
     
     public String getCustomerNationalId() {
         return customerNationalId;
     }
     
-    public void setCustomerNationalId(String customerNationalId) {
-        this.customerNationalId = customerNationalId;
-    }
-    
     public String getCustomerName() {
         return customerName;
-    }
-    
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
     }
     
     public String getCustomerSurname() {
         return customerSurname;
     }
     
-    public void setCustomerSurname(String customerSurname) {
-        this.customerSurname = customerSurname;
-    }
-    
     public String getCustomerAddress() {
         return customerAddress;
-    }
-    
-    public void setCustomerAddress(String customerAddress) {
-        this.customerAddress = customerAddress;
     }
     
 }

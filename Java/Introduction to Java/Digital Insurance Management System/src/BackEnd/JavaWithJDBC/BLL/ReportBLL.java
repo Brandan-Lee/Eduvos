@@ -2,9 +2,11 @@
 package BackEnd.JavaWithJDBC.BLL;
 
 import BackEnd.JavaWithJDBC.DAL.DAO.ReportDAO;
-import BackEnd.JavaWithJDBC.DAL.DTO.CustomerWithPoliciesDTO;
-import java.util.*;
+import BackEnd.JavaWithJDBC.DAL.DTO.PolicyDisplayDTO;
 import java.sql.*;
+import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * @author brand
@@ -18,26 +20,20 @@ public class ReportBLL {
         this.reportDAO = reportDAO;
     }
     
-    public HashMap<Integer, CustomerWithPoliciesDTO> generateCustomersWithPoliciesReport(CustomerWithPoliciesDTO customer) throws SQLException {
+    //Communicate with reportDAO to get all the policies from the table
+    public ObservableList<PolicyDisplayDTO> getAllPolicies() throws SQLException {
         
-        HashMap<Integer, CustomerWithPoliciesDTO> report = reportDAO.generateCustomersWithPoliciesReport(customer);
+        ArrayList<PolicyDisplayDTO> policies = reportDAO.getAllPolicies();
         
-        if (report == null) {
-            
-            System.out.println("There was an error generating a report from ReportBLL");
-            return new HashMap<>();
-            
-        } else if (report.isEmpty()) {
-            
-            System.out.println("A report couldn't be generated from ReportBLL");
-            return report;
-            
-        } else {
-            
-            System.out.println("A report has been successfully generated in ReportBLL");
-            return report;
-            
+        ObservableList<PolicyDisplayDTO> list = FXCollections.observableArrayList(policies);
+        
+        //check to see if the display list is empty or not
+        if (list.isEmpty()) {
+            System.out.println("No policies have been found in report dao");
         }
         
+        return list;
+        
     }
+    
 }

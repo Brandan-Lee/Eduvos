@@ -3,7 +3,7 @@ package FrontEnd.JavaFX;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.DialogPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -11,62 +11,78 @@ import javafx.stage.Stage;
 public class CustomAlerts {
     
     private final String ALERT_TYPE_ERROR = "Error";
-    private final String ALERT_TYPE_MESSAGE = "Success";
+    private final String ALERT_TYPE_MESSAGE = "Success";    
+    private final String ALERT_TYPE_INFORMATION = "Information";     
+    private final String ALERT_TYPE_SUCCESS = "Success";
+
+    private String pathToStyleSheet;
     
-    private void configureAlert(Alert alert, String title, String headerText, Stage parent, TextField txtInput) {
-        
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.getButtonTypes().setAll(ButtonType.OK);
-        
-        if (txtInput != null) {
-            alert.getDialogPane();
-        }
-        
-        if (parent != null) {
-            positionAlert(alert, parent);
-        }
-        
+    public CustomAlerts(String pathToStyleSheet) {
+        this.pathToStyleSheet = pathToStyleSheet;
     }
     
-    //This method handles the response that is thrown from the alert
-    private void handleAlertResponses(Alert alert, Runnable onOk) {
+    //Set the styling of the alert and its position
+    private void applyAlertStylingAndPosition(Alert alert, Stage parent) {
         
-        alert.showAndWait().ifPresent(response -> {
+        DialogPane pane = alert.getDialogPane();
         
-            if (response == ButtonType.OK) {
-                alert.close();
-            }
+        //Apply custome css
+        if (pathToStyleSheet != null && !pathToStyleSheet.isEmpty()) {
             
-        });
+            pane.getStylesheets().add(pathToStyleSheet);
+            pane.getStyleClass().add("custom-alert-dialog");
+            
+        }
+        
+        //Set the alert to the middle of the parent stage
+        if (parent != null) {
+            
+            alert.initOwner(parent);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            
+        }
         
     }
     
-    //This method is to configure all the alerts during the frontend operations
-    private void showAndConfigureAlert(Alert.AlertType type, String title, String headerText, Stage parent, TextField txtInput, Runnable onOk) {
+    //Show the alert and tell it how it should handle your alert response
+    private ButtonType showAndHandleAlert(Alert.AlertType type, String title, String headerText, String message, Stage parent, ButtonType[] buttonTypes) {
         
         Alert alert = new Alert(type);
-        configureAlert(alert, title, headerText, parent, txtInput);
-        handleAlertResponses(alert, onOk);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(message);
+        alert.getButtonTypes().setAll(buttonTypes);
+        
+        applyAlertStylingAndPosition(alert, parent);
+        
+        return alert.showAndWait().orElse(null);
         
     }
     
+    //Configuration of the error alert
     public void errorAlert(String message, Stage parent) {
-        showAndConfigureAlert(Alert.AlertType.ERROR, ALERT_TYPE_ERROR, message, parent, null, () -> {});
+        showAndHandleAlert(Alert.AlertType.ERROR, ALERT_TYPE_ERROR, null, message, parent, new ButtonType[]{ButtonType.OK});
     }
     
-    //This method helps to position the alert to the middle of the parent GUI
-    private void positionAlert(Alert alert, Stage parent) {
+    //Configuration of the infoAlert
+    public void infoAlert(String title, String message, Stage parent, Runnable callBack) {
         
-        alert.initOwner(parent);
-        alert.initModality(Modality.WINDOW_MODAL);
+        ButtonType result = showAndHandleAlert(Alert.AlertType.INFORMATION, ALERT_TYPE_INFORMATION, null, message, parent, new ButtonType[]{ButtonType.OK});
         
-        //Set the new alerts position to the middle of the parent stage
-        double centerXPosition = parent.getX() + (parent.getWidth() - alert.getWidth()) / 2;
-        double centerYPosition = parent.getY() + (parent.getHeight() -alert.getHeight()) / 2;
+        if (result == ButtonType.OK && callBack != null) {
+            callBack.run();
+        }
         
-        alert.setX(centerXPosition);
-        alert.setY(centerYPosition);
+    }
+    
+    //configuration of the success alert
+    public void successAlert(String title, String message, Stage parent, Runnable callBack) {
+        
+        ButtonType result = showAndHandleAlert(Alert.AlertType.INFORMATION, ALERT_TYPE_INFORMATION, null, message, parent, new ButtonType[]{ButtonType.OK});
+        
+        if (result == ButtonType.OK && callBack != null) {
+            callBack.run();
+        }
         
     }
     

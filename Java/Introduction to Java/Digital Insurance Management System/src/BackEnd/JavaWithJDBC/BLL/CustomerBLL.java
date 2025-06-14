@@ -4,11 +4,6 @@ package BackEnd.JavaWithJDBC.BLL;
 import BackEnd.JavaWithJDBC.DAL.DAO.CustomerDAO;
 import BackEnd.JavaWithJDBC.DAL.DTO.CustomerDTO;
 import java.sql.SQLException;
-import java.util.*;
-
-/**
- * @author brand
- */
 
 public class CustomerBLL {
     
@@ -38,32 +33,8 @@ public class CustomerBLL {
         
     }
     
-    ////This method is used to communicate with the database through the CustomerDAO to get all the customers. Once all customers has been received, the method stores all the customers in a hashmap
-    public HashMap<Integer, CustomerDTO> getCustomers() throws SQLException {
-        
-        HashMap<Integer, CustomerDTO> allCustomers = customerDAO.getCustomers();
-        
-        if (allCustomers == null) {
-            
-            System.out.println("There was an error retrieving all the customers from the database in CustomerBLL");
-            return new HashMap<>();
-            
-        } else if (allCustomers.isEmpty()) {
-            
-            System.out.println("No customers has been found in the database");
-            return allCustomers;
-            
-        } else {
-            
-            System.out.println("All customers have been retrieved successfully from the database in CustomerBLL");
-            return allCustomers;
-            
-        }
-        
-    }
-    
     //This method is used to communicate with the database through the CustomerDAO to find a customer that matches a specific national id. Once a customer has been found, the method checks if it was a success and adds it to a new CustomerDTO object
-    public CustomerDTO findCustomerByNationalId(int customerNationalId) throws SQLException {
+    public CustomerDTO findCustomerByNationalId(String customerNationalId) throws SQLException {
         
         CustomerDTO customer = customerDAO.findCustomerByNationalId(customerNationalId);
         
@@ -71,7 +42,7 @@ public class CustomerBLL {
             System.out.println("A customer with a matching national ID has been found in CustomerBLL");
             return customer;
         } else {
-            System.out.println("No mathching customers with the national ID has been found");
+            System.out.println("No matching customers with the national ID has been found");
         }
         
         return customer;

@@ -1,12 +1,6 @@
 
 package GeneralUtilities;
 
-import java.util.*;
-
-/**
- * @author brand
- */
-
 public class EnumSets {
     
     public enum PolicyType {
@@ -23,13 +17,13 @@ public class EnumSets {
       TwentyThousand(20000),
       ThirtyThousand(30000);
       
-      private final int value;
+      private final double value;
       
-      SumInsured(int value) {
+      SumInsured(double value) {
           this.value = value;
       }
       
-      public int getValue() {
+      public double getValue() {
           return value;
       }
       
@@ -66,27 +60,6 @@ public class EnumSets {
             
             return null;
         }
-        
-    }
-    
-    public EnumSet<PolicyType> policyTypeSet() {
-        
-        EnumSet<PolicyType> policySet = EnumSet.allOf(PolicyType.class);
-        return policySet;
-        
-    }
-    
-    public EnumSet<SumInsured> sumInsuredSet() {
-        
-        EnumSet<SumInsured> sumInsuredSet = EnumSet.allOf(SumInsured.class);
-        return sumInsuredSet;
-        
-    }
-    
-    public EnumSet<PolicyPremium> policyPremiumSet() {
-        
-        EnumSet<PolicyPremium> policyPremiumSet = EnumSet.allOf(PolicyPremium.class);
-        return policyPremiumSet;
         
     }
       

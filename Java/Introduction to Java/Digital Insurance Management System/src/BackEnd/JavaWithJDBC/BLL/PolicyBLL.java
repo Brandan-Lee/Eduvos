@@ -19,7 +19,7 @@ public class PolicyBLL {
     private PolicyDAO policyDAO;
     
     //Constructor for the class
-    public PolicyBLL(CustomerDAO customerDAO, PolicyDAO policy) {
+    public PolicyBLL(PolicyDAO policyDAO) {
         this.policyDAO = policyDAO;
     }
     
@@ -38,30 +38,6 @@ public class PolicyBLL {
         }
         
         return newPolicyId;
-        
-    }
-    
-    ////This method is used to communicate with the database through the PolicyDAO to get all the policies. Once all policies has been received, the method stores all the policies in a hashmap
-    public HashMap<Integer, PolicyDTO> getPolicies() throws SQLException {
-        
-        HashMap<Integer, PolicyDTO> allPolicies = policyDAO.getPolicies();
-        
-        if (allPolicies == null) {
-            
-            System.out.println("There was an error retrieving all the policies in the PolicyBLL");
-            return new HashMap<>();
-            
-        } else if (allPolicies.isEmpty()) {
-            
-            System.out.println("No policies has been found in the database");
-            return allPolicies;
-            
-        } else {
-            
-            System.out.println("All policies have been retrieved successfully from the database in PoliciesBLL");
-            return allPolicies;
-            
-        }
         
     }
     
