@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane fx:id="gridMain" alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" styleClass="main-grid" vgap="10.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.JavaFX.Controllers.DIMSController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="304.0" minWidth="10.0" prefWidth="304.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="10.0" prefWidth="296.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+    <children>
+      <Label fx:id="lblHeading" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="599.0" styleClass="main-title" stylesheets="@style.css" text="Digital Insurance Management System" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
+      <Label fx:id="lblCustomerId" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="ID Number: " textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+      <TextField fx:id="txtCustomerId" nodeOrientation="LEFT_TO_RIGHT" prefHeight="41.0" prefWidth="281.0" promptText="8291573604285" styleClass="text-fields" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Label fx:id="lblCustomerName" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="Name:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <TextField fx:id="txtCustomerName" nodeOrientation="LEFT_TO_RIGHT" prefHeight="41.0" prefWidth="281.0" promptText="Brandan-Lee" styleClass="text-fields" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="lblSurname" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="Surname:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+      <TextField fx:id="txtCustomerSurname" nodeOrientation="LEFT_TO_RIGHT" prefHeight="41.0" prefWidth="281.0" promptText="Sherbrooke" styleClass="text-fields" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label fx:id="lbllCustomerAddress" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="Address:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <TextField fx:id="txtCustomerAddress" nodeOrientation="LEFT_TO_RIGHT" prefHeight="41.0" prefWidth="281.0" promptText="1 Gordon Lane Bedfordview" styleClass="text-fields" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Label fx:id="lblCustomerAge" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="Age:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+      <TextField fx:id="txtCustomerAge" nodeOrientation="LEFT_TO_RIGHT" prefHeight="41.0" prefWidth="281.0" promptText="23" styleClass="text-fields" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Label fx:id="lblPolicy" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="Policy Type:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+      <ComboBox fx:id="cmbPolicyType" prefWidth="150.0" styleClass="combo-box" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6">
+          <cursor>
+          </cursor>
+      </ComboBox>
+      <Label fx:id="lblSumInsured" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="Sum Insured::" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+      <ComboBox fx:id="cmbSumInsured" prefWidth="150.0" styleClass="combo-box" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7">
+          <cursor>
+          </cursor>
+      </ComboBox>
+      <Label fx:id="lblCoverageAmount" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="Coverage Amount:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+      <TextField fx:id="txtCoverageAmount" nodeOrientation="LEFT_TO_RIGHT" prefHeight="41.0" prefWidth="281.0" promptText="40000" styleClass="text-fields" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <HBox fx:id="calculateHbox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="9">
+          <children>
+            <Button fx:id="btnCalculatePremium" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#calculatePremium" prefHeight="50.0" prefWidth="150.0" stylesheets="@style.css" text="Calculate Premium">
+                <styleClass>
+                    <String fx:value="button" />
+                    <String fx:value="buttons" />
+                </styleClass>
+                <cursor>
+                </cursor>
+                <HBox.margin>
+                    <Insets />
+                </HBox.margin>
+            </Button>
+          </children>
+      </HBox>
+      <Label fx:id="lblPremium" alignment="CENTER" contentDisplay="TOP" styleClass="labels" stylesheets="@style.css" text="Premium:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
+      <TextField fx:id="txtPremium" editable="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="41.0" prefWidth="281.0" styleClass="text-fields" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+      <HBox fx:id="submitHBox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
+          <children>
+            <Button fx:id="btnSubmit" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#submitPolicy" prefHeight="50.0" prefWidth="150.0" stylesheets="@style.css" text="Submit">
+                <styleClass>
+                    <String fx:value="button" />
+                    <String fx:value="buttons" />
+                </styleClass>
+                <cursor>
+                </cursor>
+            </Button>
+          </children>
+      </HBox>
+      <HBox fx:id="viewPoliciesAndCloseHbox" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="12" GridPane.valignment="BOTTOM">
+          <children>
+            <Button fx:id="btnViewPolicies" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewPolicies" prefHeight="50.0" prefWidth="150.0" stylesheets="@style.css" text="View Policies">
+                <styleClass>
+                    <String fx:value="button" />
+                    <String fx:value="buttons" />
+                </styleClass>
+                <cursor>
+                </cursor>
+                <HBox.margin>
+                    <Insets left="80.0" />
+                </HBox.margin>
+            </Button>
+            <Button fx:id="btnClose" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#closeApplication" prefHeight="50.0" prefWidth="150.0" styleClass="closeButton" stylesheets="@style.css" text="Close">
+                <cursor>
+                </cursor>
+                <HBox.margin>
+                    <Insets left="157.0" />
+                </HBox.margin>
+            </Button>
+          </children>
+          <GridPane.margin>
+            <Insets />
+          </GridPane.margin>
+      </HBox>
+    </children>
+    <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <stylesheets>
+      <URL value="@../style.css" /> <!-- Only the correct path -->
+    </stylesheets>
+</GridPane>
