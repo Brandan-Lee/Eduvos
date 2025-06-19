@@ -142,8 +142,7 @@ VALUES ('FAC002', 'ACT003', TO_DATE('2025-10-20', 'YYYY-MM-DD'));
 INSERT INTO USES(facilityID, actRef, useDate)
 VALUES ('FAC002', 'ACT004', TO_DATE('2025-12-12', 'YYYY-MM-DD'));
 
---  Retrieve and display the number of municipalities that do not have any facility with an activity of ‘Music’ using a suitable query. Remember to use multiple JOIN statements, aggregate functions,
---suitable wild cards character and sub-query where necessary.                              
+--  Retrieve and display the number of municipalities that do not have any facility with an activity of ‘Music’ using a suitable query.                               
 SELECT COUNT(munCode) AS municipalities_count
 FROM MUNICIPALITIES
 WHERE MUNICIPALITIES.munCode NOT IN (
@@ -156,12 +155,89 @@ WHERE MUNICIPALITIES.munCode NOT IN (
 
 );
 
---  Write a query to retrieve and display a list of provinces that have municipalities with an average population of 4,000,000 (4 million) or more. You may consider the use of sub-query and
---  relevant conditional operators in obtaining the output if necessary.  
+--  Write a query to retrieve and display a list of provinces that have municipalities with an average population of 4,000,000 (4 million) or more.  
 SELECT PROVINCES.ProvinceCode, PROVINCES.ProvinceName
 FROM PROVINCES
 JOIN MUNICIPALITIES ON PROVINCES.ProvinceCode = MUNICIPALITIES.ProvinceCode
 WHERE MUNICIPALITIES.avgPopulation >= 4000000;
+
+--  The management intends to know the utilisation capacity of each facility in order to plan for future events and expansion. Write a stored procedure named “Province_Capacity_Utilization_procedure”
+--  that calculates and displays the cultural facility capacity utilisation per province. The procedure should:
+--  Calculates the total number of facilities in each province.
+--  Sum up the total capacity of all facilities within each province.
+CREATE OR REPLACE PROCEDURE Province_Capacity_Utilization_Procedure
+AS
+BEGIN
+
+    DBMS_OUTPUT.PUT_LINE('Statement Processed.');
+    
+    FOR loop_utilization IN (
+    
+        SELECT
+            
+            --  To display the province name
+            P.ProvinceName,
+            --  To get the total facilities in each province
+            COUNT(DISTINCT FACILITIES.facilityID) AS Total_Facilities,
+            --  To get the total capacity of these faciilities
+            (
+            
+                SELECT SUM(F.capacity)
+                FROM FACILITIES F
+                JOIN MUNICIPALITIES M ON F.munCode = M.munCode
+                WHERE M.ProvinceCode = P.ProvinceCode
+            
+            )AS Total_Capacity,
+            --  To find the number of activities hosted by each facility
+            COUNT(USES.facilityID) AS Total_Activities_Hosted,
+            
+            CASE
+                WHEN (
+                    
+                    SELECT SUM(F.capacity)
+                    FROM FACILITIES F
+                    JOIN MUNICIPALITIES M ON F.munCode = M.munCode
+                    WHERE M.ProvinceCode = P.ProvinceCode
+                    
+                ) = 0 THEN 0
+                ELSE (
+                    COUNT(USES.facilityID) / (
+                        
+                        SELECT SUM(F.capacity)
+                        FROM FACILITIES F
+                        JOIN MUNICIPALITIES M ON F.munCode = M.munCode
+                        WHERE M.ProvinceCode = P.ProvinceCode
+                        
+                    ) * 100
+                )
+            END AS Utilization_Percentage
+        FROM
+            PROVINCES P
+        JOIN MUNICIPALITIES ON MUNICIPALITIES.ProvinceCode = P.ProvinceCode
+        JOIN FACILITIES ON MUNICIPALITIES.munCode = FACILITIES.munCode
+        LEFT JOIN USES ON USES.facilityID = FACILITIES.facilityID
+        GROUP BY P.ProvinceCode, P.ProvinceName
+        ORDER BY Utilization_Percentage DESC
+    
+    )
+    LOOP
+    
+    DBMS_OUTPUT.PUT_LINE(
+    
+        'Province: ' || loop_utilization.ProvinceName ||
+        ' | Facilities: ' || loop_utilization.Total_Facilities ||
+        ' | Capacity: ' || loop_utilization.Total_Capacity ||
+        ' | Activities: ' || loop_utilization.Total_Activities_Hosted ||
+        ' | Utilization: ' || TO_CHAR(ROUND(loop_utilization.Utilization_Percentage, 2)) || '%'
+    
+    );
+    END LOOP;
+
+END;
+/
+
+SET SERVEROUTPUT ON SIZE 1000000;
+EXEC Province_Capacity_Utilization_Procedure;
 
 
 SELECT * FROM PROVINCES;
@@ -170,3 +246,6 @@ SELECT * FROM FACILITIES;
 SELECT * FROM ROOMS;
 SELECT * FROM ACTIVITIES;
 SELECT * FROM USES;
+
+-- Commit the changes to make them permanent
+COMMIT;
