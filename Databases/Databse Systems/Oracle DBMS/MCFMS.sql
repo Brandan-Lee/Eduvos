@@ -165,12 +165,18 @@ WHERE MUNICIPALITIES.avgPopulation >= 4000000;
 --  that calculates and displays the cultural facility capacity utilisation per province. The procedure should:
 --  Calculates the total number of facilities in each province.
 --  Sum up the total capacity of all facilities within each province.
+--  Count the total number of activities hosted by those facilities. 
+--  Computes a capacity utilisation percentage
+--  Display a province-based report that includes the province name, number of facilities, total capacity, total activities hosted and the computed utilisation percentage in each province.
+--  Sort the output by utilisation percentage in descending order. 
 CREATE OR REPLACE PROCEDURE Province_Capacity_Utilization_Procedure
 AS
 BEGIN
-
+    
+    --  Custom output to the console
     DBMS_OUTPUT.PUT_LINE('Statement Processed.');
     
+    -- A loop has to be used so that all the data in the tables that are selected and joined can be iterated through
     FOR loop_utilization IN (
     
         SELECT
@@ -179,7 +185,7 @@ BEGIN
             P.ProvinceName,
             --  To get the total facilities in each province
             COUNT(DISTINCT FACILITIES.facilityID) AS Total_Facilities,
-            --  To get the total capacity of these faciilities
+            --  To get the total capacity of these faciilities. I use a subquery as multiple activities is associated with the facility, and when it is joined with the left join, the capacity is doubled.
             (
             
                 SELECT SUM(F.capacity)
@@ -191,6 +197,7 @@ BEGIN
             --  To find the number of activities hosted by each facility
             COUNT(USES.facilityID) AS Total_Activities_Hosted,
             
+            -- Error handling to ensure that the total capacity isn't 0. 
             CASE
                 WHEN (
                     
@@ -213,8 +220,11 @@ BEGIN
             END AS Utilization_Percentage
         FROM
             PROVINCES P
+        --  Join the Municipalities table
         JOIN MUNICIPALITIES ON MUNICIPALITIES.ProvinceCode = P.ProvinceCode
+        --  Join the FACILITIES table
         JOIN FACILITIES ON MUNICIPALITIES.munCode = FACILITIES.munCode
+        -- Left join is used in case there is a facility that has a null value.
         LEFT JOIN USES ON USES.facilityID = FACILITIES.facilityID
         GROUP BY P.ProvinceCode, P.ProvinceName
         ORDER BY Utilization_Percentage DESC
@@ -222,6 +232,7 @@ BEGIN
     )
     LOOP
     
+    --  Structured output to the console
     DBMS_OUTPUT.PUT_LINE(
     
         'Province: ' || loop_utilization.ProvinceName ||
@@ -236,10 +247,11 @@ BEGIN
 END;
 /
 
+--  This query will be used to run the procedure
 SET SERVEROUTPUT ON SIZE 1000000;
 EXEC Province_Capacity_Utilization_Procedure;
 
-
+--  To view the data in the tables
 SELECT * FROM PROVINCES;
 SELECT * FROM MUNICIPALITIES;
 SELECT * FROM FACILITIES;
@@ -247,5 +259,5 @@ SELECT * FROM ROOMS;
 SELECT * FROM ACTIVITIES;
 SELECT * FROM USES;
 
--- Commit the changes to make them permanent
+-- Make the changes permanent
 COMMIT;
