@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">TripBuddy</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+
+    <!--    English Language -->
+    <string name="eng_btn_plan_trip">Plan Trip</string>
+    <string name="eng_budget_btn">Budget</string>
+    <string name="eng_create_memory_btn">Create Memory</string>
+    <string name="eng_welcome_tv">Welcome to TripBuddy</string>
+    <string name="eng_version_tv">Version 1.0</string>
+    <string name="eng_view_gallery_btn">View Gallery</string>
+    <string name="eng_email_et">Email</string>
+    <string name="eng_login_btn">Login</string>
+    <string name="eng_register_btn">Register</string>
+    <string name="eng_password_et">Password</string>
+    <string name="eng_name_et">Name</string>
+    <string name="eng_surname_et">Surname</string>
+    <string name="eng_age_et">Age</string>
+    <string name="eng_confirm_password_et">Confirm Password</string>
+    <string name="eng_login_header_et">Login to TripBuddy</string>
+    <string name="eng_register_account_btn">Register Account</string>
+    <string name="eng_back_to_login_page_btn">Back to Login Page</string>
+    <string name="eng_register_account_tv">Register Account</string>
+    <string name="eng_remember_me_cb">Remember me</string>
+    <string name="eng_update_user_icon_btn">Update User Icon</string>
+    <string name="eng_forgot_password_btn">Forgot Password?</string>
+    <string name="eng_forgot_password_tv">Forgot Password</string>
+    <string name="eng_update_password_btn">Update Password</string>
+    <string name="eng_plan_trip_tv">Plan Trip</string>
+    <string name="eng_enter_destination_et">Enter Destination</string>
+    <string name="eng_start_date_tv">Start Date</string>
+    <string name="eng_end_date_tv">End Date</string>
+    <string name="default_date">Jan 01 2020</string>
+    <string name="eng_enter_notes_et">Enter notes</string>
+    <string name="eng_custom_expenses">Custom Expenses</string>
+    <string name="eng_visa_fees_et">Visa Fees</string>
+    <string name="eng_transport_fees_et">Transport Fees</string>
+    <string name="eng_enter_meals_fees_et">Enter meals fees</string>
+    <string name="eng_save_trip_et">Save Trip</string>
+    <string name="eng_select_activities_tv">Select Activities</string>
+    <string name="eng_selected_item_rv_tv">Selected Item</string>
+    <string name="eng_sub_total_r_tv">Sub Total: R</string>
+    <string name="eng_discount_r_tv">Discount: R\t</string>
+    <string name="eng_final_budget_r_rv_tv">Final Budget: R</string>
+    <string name="eng_confirm_trip_button">Confirm Trip</string>
+    <string name="menu_plan_trip">Plan Trip</string>
+
+</resources>

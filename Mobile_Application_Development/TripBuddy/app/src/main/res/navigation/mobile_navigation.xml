@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.tripbuddy.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_nav_home_to_nav_budget"
+            app:destination="@id/nav_budget" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_plan_trip"
+        android:name="com.example.tripbuddy.ui.plan_trip.PlanTripFragment"
+        android:label="@string/menu_plan_trip"
+        tools:layout="@layout/fragment_view_gallery" />
+
+    <fragment
+        android:id="@+id/nav_create_memory"
+        android:name="com.example.tripbuddy.ui.create_memory.CreateMemoryFragment"
+        android:label="Create memory"
+        tools:layout="@layout/fragment_create_memory">
+
+        <action
+            android:id="@+id/action_createMemoryFragment_to_createMemoryFormFragment"
+            app:destination="@id/nav_create_memory_forms" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_create_memory_forms"
+        android:name="com.example.tripbuddy.ui.create_memory.CreateMemoryFormFragment"
+        android:label="Create memory form"
+        tools:layout="@layout/fragment_create_memory_form">
+
+        <argument
+            android:name="tripId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+        <action
+            android:id="@+id/action_createMemoryFormFragment_to_viewMemoryFragment"
+            app:destination="@id/viewMemoryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/viewMemoryFragment"
+        android:name="com.example.tripbuddy.ui.create_memory.ViewMemoryFragment"
+        android:label="fragment_view_memory"
+        tools:layout="@layout/fragment_view_memory">
+
+        <argument
+            android:name="memoryId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_budget"
+        android:name="com.example.tripbuddy.ui.budget.BudgetSummaryFragment"
+        android:label="Budget"
+        tools:layout="@layout/fragment_budget_summary" />
+
+    <fragment
+        android:id="@+id/nav_view_gallery"
+        android:name="com.example.tripbuddy.ui.view_gallery.ViewGalleryFragment"
+        android:label="View Gallery"
+        tools:layout="@layout/fragment_view_gallery" />
+
+</navigation>

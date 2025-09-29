@@ -1,0 +1,6 @@
+package com.example.tripbuddy.ui.create_memory;
+
+import androidx.lifecycle.ViewModel;
+
+public class CreateMemoryFormViewModel extends ViewModel {
+}

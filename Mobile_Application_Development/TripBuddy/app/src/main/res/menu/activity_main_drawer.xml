@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/outline_add_home_24"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_plan_trip"
+            android:icon="@drawable/outline_draw_24"
+            android:title="Plan Trip" />
+        <item
+            android:id="@+id/nav_create_memory"
+            android:icon="@drawable/outline_book_2_24"
+            android:title="Create Memory" />
+        <item
+            android:id="@+id/nav_budget"
+            android:icon="@drawable/outline_attach_money_24"
+            android:title="Budget" />
+        <item
+            android:id="@+id/nav_view_gallery"
+            android:icon="@drawable/outline_add_a_photo_24"
+            android:title="View Gallery" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:icon="@drawable/outline_exit_to_app_24"
+            android:title="Log Out" />
+    </group>
+</menu>
