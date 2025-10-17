@@ -1,3 +1,8 @@
+package data;
+
+
+import data.DoublyLinkedList;
+
 
 public class LinkedStack<E> implements Stack<E> {
     
@@ -6,7 +11,7 @@ public class LinkedStack<E> implements Stack<E> {
     
     public LinkedStack() {
         this.list = new DoublyLinkedList<>();
-        maxSize = 0;
+        maxSize = Integer.MAX_VALUE;
     }
     
     public LinkedStack(int m) {
@@ -27,11 +32,12 @@ public class LinkedStack<E> implements Stack<E> {
     @Override
     public void push(E e) {
         
-        if (maxSize > 0 && list.size() >= maxSize) {
+        if (list.size() >= maxSize) {
             list.removeLast();
         }
         
         list.addFirst(e);
+        
     }
 
     @Override
@@ -44,6 +50,7 @@ public class LinkedStack<E> implements Stack<E> {
         return list.removeFirst();
     }
     
+    @Override
     public int getMaxSize() {
         return maxSize;
     }

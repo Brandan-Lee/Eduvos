@@ -1,3 +1,5 @@
+package data;
+
 
 public class DoublyLinkedList<E> {
     
@@ -68,14 +70,14 @@ public class DoublyLinkedList<E> {
             return header.getNext().getElement();
         }
     }
-    
-    public E last() {
-        if (isEmpty()) {
-            return null;
-        } else {
-            return trailer.getPrev().getElement();
-        }
-    }
+//    
+//    public E last() {
+//        if (isEmpty()) {
+//            return null;
+//        } else {
+//            return trailer.getPrev().getElement();
+//        }
+//    }
     
     private void addBetween(E e, Node<E> prev, Node<E> next) {
         Node<E> newest = new Node<>(e, prev, next);
@@ -134,5 +136,7 @@ public class DoublyLinkedList<E> {
         
         return result.toString();
     }
+    
+    //Todo implement iterator
     
 }
