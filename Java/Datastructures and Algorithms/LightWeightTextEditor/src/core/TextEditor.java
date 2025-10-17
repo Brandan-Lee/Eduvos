@@ -71,14 +71,13 @@ public class TextEditor {
         //Get the current text stored in the textList. Check to see if the text is stored within the textList. If so, add it to the clipboard
         String currentText = textList.listToString();
 
-        if (!currentText.contains(text)) {
-            System.out.println("Please select from the current text\n");
-            return;
-              
+        if (!currentText.contains(text)) { 
+            System.out.println("Please select from the current text");
+        } else {
+            clipBoardList.add(text);
+            System.out.println("Text copied to clipboard");
         }
-        
-        clipBoardList.add(text);
-        
+            
     }
     
     //Method that allows the text to be pasted from the clipboard

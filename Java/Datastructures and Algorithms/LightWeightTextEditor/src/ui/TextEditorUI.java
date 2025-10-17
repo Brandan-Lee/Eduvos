@@ -112,7 +112,6 @@ public class TextEditorUI {
             System.out.println("No text has been entered. Please try again");
         } else {
             editor.copy(copiedText);
-            System.out.println("Text copied to clipboard");
         }
         
     }
