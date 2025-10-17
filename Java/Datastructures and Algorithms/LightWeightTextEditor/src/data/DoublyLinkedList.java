@@ -63,6 +63,7 @@ public class DoublyLinkedList<E> {
         }
     }
     
+    //Returns the first element of the node without removing it
     public E first() {
         if (isEmpty()) {
             return null;
@@ -70,15 +71,8 @@ public class DoublyLinkedList<E> {
             return header.getNext().getElement();
         }
     }
-//    
-//    public E last() {
-//        if (isEmpty()) {
-//            return null;
-//        } else {
-//            return trailer.getPrev().getElement();
-//        }
-//    }
     
+    //helper method to add an element to the linked list inbetweeen the given nodes
     private void addBetween(E e, Node<E> prev, Node<E> next) {
         Node<E> newest = new Node<>(e, prev, next);
         prev.setNext(newest);
@@ -86,14 +80,17 @@ public class DoublyLinkedList<E> {
         size++;
     }
     
+    //Add the element to the front of the list
     public void addFirst(E e) {
        addBetween(e, header, header.getNext());
     }
     
+    //Add the element to the end of the list
     public void addLast(E e) {
         addBetween(e, trailer.getPrev(), trailer);
     }
     
+    //helper method to remove the given node from the list and to return the element
     private E remove(Node<E> node) {
         Node<E> prev = node.getPrev();
         Node<E> next = node.getNext();
@@ -103,6 +100,7 @@ public class DoublyLinkedList<E> {
         return node.getElement();
     }
     
+    //Removes and returns the first element of the list
     public E removeFirst() {
         if (isEmpty()) {
             return null;
@@ -111,6 +109,7 @@ public class DoublyLinkedList<E> {
         }
     }
     
+    //Removes and returns the last element of the list
     public E removeLast() {
         if (isEmpty()) {
             return null;
@@ -119,24 +118,24 @@ public class DoublyLinkedList<E> {
         }
     }
     
+    //Method that helps to display the list as a string.
     public String listToString() {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         Node<E> current = header.getNext();
         boolean first = true;
         
+        //Ensure that after the first word has been added, a space should be made between the words in the list
         while (current != trailer) {
             if (!first) {
-                result.append(" ");
+                result = result + " ";
             }
             
-            result.append(current.getElement());
+            result = result + current.getElement();
             current = current.getNext();
             first = false;
         }
         
-        return result.toString();
+        return result;
     }
-    
-    //Todo implement iterator
     
 }
