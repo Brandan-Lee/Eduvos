@@ -28,8 +28,9 @@ public class TextEditor {
             return;
         }
         
+        String trimmedText = text.trim();
         //Check to see if the user has entered more than one word. If so, add each word as a node to the textList
-        String[] words = text.split(" ");
+        String[] words = trimmedText.split("\\s+"); //This regex accounts for one or more white spaces
         
          for (String word : words) {
             if (!word.isEmpty()) {
@@ -38,7 +39,7 @@ public class TextEditor {
         }
         
         //Push the text entered by the user to the top of the stack
-        undoStack.push(text);
+        undoStack.push(trimmedText);
         //displayAllStructures();
         
     }
@@ -52,11 +53,19 @@ public class TextEditor {
         
         //Retrieve the last word stored in the textList, and push only the letter to the undoStack
         String lastWord = textList.removeLast();
-        undoStack.push(lastWord.substring(lastWord.length() - 1));
+        
+        if (lastWord.isEmpty()) {
+            return false;
+        }
+        
+        String deletedChar = lastWord.substring(lastWord.length() - 1);
+        String newWord = lastWord.substring(0, lastWord.length() - 1);
+
+        
+        undoStack.push(deletedChar);
         
         //Add the new updated word with the deleted character back to the textList
-        if (lastWord.length() > 1) {
-            String newWord = lastWord.substring(0, lastWord.length() - 1);
+        if (!newWord.isEmpty()) {
             textList.addLast(newWord);
         }
         
@@ -93,7 +102,7 @@ public class TextEditor {
         
         //Get the text from the clipboard. Add the text in the textList by word
         String textToPaste = clipBoardList.get(actualIndex);
-        String[] words = textToPaste.split(" ");
+        String[] words = textToPaste.split("\\s+"); //This regex accounts for one or more white spaces
         
         for (String word : words) {
             if (!word.isEmpty()) {
@@ -138,20 +147,30 @@ public class TextEditor {
        String element = undoStack.pop();
        
        //check to see if the element is a word or a letter
-       if (!element.isEmpty() && element.length() > 1) {
-           String[] words = element.split(" ");
+       //Delete operation in undo stack
+       if (element.length() == 1) {
+           String lastWord = "";
+           
+           if (!textList.isEmpty()) {
+               lastWord = textList.removeLast();
+           }
+           
+           textList.addLast(lastWord + element);
+       
+        //This is the insert/paste operation logic
+       } else if (!element.isEmpty()) {
+           String[] words = element.split("\\s+");
            
            for (int i = 0; i < words.length; i++) {
                textList.removeLast();
            }
-       } else if (element.length() == 1 && !textList.isEmpty()) {
-           String lastWord = textList.removeLast();
-           textList.addLast(lastWord + element);
+       } else {
+           return false;
        }
        
        //Add the element that was undone to the top of the redoStack
        redoStack.push(element);
-       //displayAllStructures();
+       // displayAllStructures();
        return true;
         
     }
@@ -167,20 +186,34 @@ public class TextEditor {
         String elementToRedo = redoStack.pop();
         
         //check to see if the element is a word or a letter
-        if (!elementToRedo.isEmpty() && elementToRedo.length() > 1) {
-            String[] words = elementToRedo.split(" ");
+        //Delete operation in redo stack
+        if (elementToRedo.length() == 1) {
+            if (!textList.isEmpty()) {
+                String lastWord = textList.removeLast();
+                String newWord = lastWord.substring(0, lastWord.length() - 1);
+                
+                if (!newWord.isEmpty()) {
+                    textList.addLast(newWord);
+                }
+            }
+            
+        } else if (!elementToRedo.isEmpty()) {
+            //This is the insert paste operation logic
+            String[] words = elementToRedo.split("\\s+");
             
             for (String word : words) {
-                textList.addLast(word);
+                if (!word.isEmpty()) {
+                    textList.addLast(word);
+                }
             }
-        } else if (elementToRedo.length() == 1 && !elementToRedo.isEmpty()) {
-            String lastWord = textList.removeLast();
-            textList.addLast(lastWord.substring(0, lastWord.length() - 1));
+            
+        } else {
+            return false;
         }
         
         //Add the element that was redone to the top of the redoStack
         undoStack.push(elementToRedo);
-        //displayAllStructures();
+        // displayAllStructures();
         return true;
 
     }
@@ -285,5 +318,5 @@ public class TextEditor {
 //        displayRedoStack();
 //        System.out.println("=====================================");
 //    }
-    
+//    
 }
