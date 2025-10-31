@@ -22,37 +22,47 @@ public class HashMap<K, V> {
         return Math.abs(hashCode % buckets.size());
     }
     
+    private SinglyLinkedList<Entry<K, V>> getBucket(K key) {
+        int bucketIndex = getBucketIndex(key);
+        return buckets.get(bucketIndex);
+    }
+    
+    private Entry<K, V> findEntry(K key, SinglyLinkedList<Entry<K, V>> bucket) {
+        for (Entry<K, V> entry : bucket) {
+            if (entry.getKey().equals(key)) {
+                return entry;
+            }
+        }
+        
+        return null;
+    }
+    
     public int size() {
         return buckets.size();
     }
     
     public boolean isEmpty() {
-        return buckets.size() == 0;
+        return size == 0;
     }
     
     public void put(K key, V value) {
-        int bucketIndex = getBucketIndex(key);
-        SinglyLinkedList<Entry<K, V>> bucket = buckets.get(bucketIndex);
+        SinglyLinkedList<Entry<K, V>> bucket = getBucket(key);
+        Entry<K, V> existingEntry = findEntry(key, bucket);
         
-        for (Entry<K, V> entry: bucket) {
-            if (entry.key.equals(key)) {
-                entry.value = value;
-                return;
-            }
+        if (existingEntry != null) {
+            existingEntry.setValue(value);
+        } else {
+            bucket.addLast(new Entry<>(key, value));
+            size++;
         }
-        
-        bucket.addLast(new Entry<>(key, value));
-        size++;
     }
     
     public V get(K key) {
-        int bucketIndex = getBucketIndex(key);
-        SinglyLinkedList<Entry<K, V>> bucket = buckets.get(bucketIndex);
+        SinglyLinkedList<Entry<K, V>> bucket = getBucket(key);
+        Entry<K, V> entry = findEntry(key, bucket);
         
-        for (Entry<K, V> entry : bucket) {
-            if (entry.key.equals(key)) {
-                return entry.value;
-            }
+        if (entry != null) {
+            return entry.getValue();
         }
         
         return null;
@@ -93,10 +103,6 @@ public class HashMap<K, V> {
         
         public K getKey() {
             return key;
-        }
-        
-        public void setKey(K key) {
-            this.key = key;
         }
         
         public V getValue() {

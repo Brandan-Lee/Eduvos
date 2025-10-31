@@ -78,6 +78,23 @@ public class SinglyLinkedList<E> implements Iterable<E> {
         return answer;
     }
     
+    private Node<E> findPrevious(Object ob) {
+        if (isEmpty() ||  head.getElement().equals(ob)) {
+            return null;
+        }
+        
+        Node<E> current = head;
+        while (current.getNext() != null) {
+            if (current.getNext().getElement().equals(ob)) {
+                return current;
+            }
+            
+            current = current.getNext();
+        }
+        
+        return null;
+    }
+    
     public boolean remove(Object obj) {
         if (isEmpty()) {
             return false;
@@ -88,17 +105,29 @@ public class SinglyLinkedList<E> implements Iterable<E> {
             return true;
         }
         
+        Node<E> prev = findPrevious(obj);
+        if (prev == null) {
+            return false;
+        }
+        
+        Node<E> nodeToRemove = findPrevious(obj);
+        if (nodeToRemove == tail) {
+            tail = prev;
+        }
+        
+        prev.setNext(nodeToRemove.getNext());
+        size--;
+        return true;
+    }
+    
+    public boolean contains(E element) {
         Node<E> current = head;
-        while (current.getNext() != null) {
-            if (current.getElement().equals(obj)) {
-                if (current.getNext() == tail) {
-                    tail = current;
-                }
-                
-                current.setNext(current.getNext().getNext());
-                size--;
+        
+        while (current != null) {
+            if (current.getElement().equals(element)) {
                 return true;
             }
+            
             current = current.getNext();
         }
         
@@ -126,20 +155,6 @@ public class SinglyLinkedList<E> implements Iterable<E> {
                return element;
            }
        };
-    }
-    
-    public boolean contains(E element) {
-        Node<E> current = head;
-        
-        while (current != null) {
-            if (current.getElement().equals(element)) {
-                return true;
-            }
-            
-            current = current.getNext();
-        }
-        
-        return false;
     }
     
     @Override

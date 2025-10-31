@@ -19,6 +19,22 @@ public class LibrarySystem {
         return title.trim().toLowerCase();
     }
     
+    private BookInformation getBookDetails(String title) {
+        String normalizedKey = getNormalizedKey(title);
+        return library.get(normalizedKey);
+    }
+    
+    private void recordBorrowing(String userId, String title) {
+        SinglyLinkedList<String> userList = booksBorrowed.get(userId);
+        
+        if (userList == null) {
+            userList = new SinglyLinkedList<>();
+            booksBorrowed.put(userId, userList);
+        }
+        
+        userList.addLast(title);
+    }
+    
     public void addBook(String key, int copies) {
         if (key.trim().isEmpty() || copies <= 0) {
             return;
@@ -29,8 +45,7 @@ public class LibrarySystem {
     }
 
     public String borrowBook(String title, String userId) {
-        String normalizedKey = getNormalizedKey(title);
-        BookInformation details = library.get(normalizedKey);
+        BookInformation details = getBookDetails(title);
         
         if (details == null) {
             return "Error: Book " + title + " is not in the library";
@@ -47,20 +62,10 @@ public class LibrarySystem {
         }
     }
     
-    private void recordBorrowing(String userId, String title) {
-        SinglyLinkedList<String> userList = booksBorrowed.get(userId);
-        
-        if (userList == null) {
-            userList = new SinglyLinkedList<>();
-            booksBorrowed.put(userId, userList);
-        }
-        
-        userList.addLast(title);
-    }
+    
 
     public String returnBook(String userId, String title) {
-        String normalizedKey = getNormalizedKey(title);
-        BookInformation details = library.get(normalizedKey);
+        BookInformation details = getBookDetails(title);
         
         if (details == null) {
             return "Book " + title + " is not in the library inventory";
@@ -86,8 +91,7 @@ public class LibrarySystem {
     }
 
     public String displayBookWaitList(String title) {
-        String normalazidKey = getNormalizedKey(title);
-        BookInformation details = library.get(normalazidKey);
+        BookInformation details = getBookDetails(title);
         
         if (details == null) {
             return "Book " + title + " is not in the library inventory";
@@ -102,8 +106,7 @@ public class LibrarySystem {
     
     public String displayBorrowedBooks() {
         if (booksBorrowed.isEmpty()) {
-            System.out.println("No books have been borrowed to any user");
-            return null;
+            return "No books have been borrowed to any user";
         }
         
         return booksBorrowed.toString();
@@ -111,8 +114,7 @@ public class LibrarySystem {
     
     public String displayInventory() {
         if (library.isEmpty()) {
-            System.out.println("The libray is empty");
-            return null;
+            return "The libray is empty";
         }
         
         return library.toString();

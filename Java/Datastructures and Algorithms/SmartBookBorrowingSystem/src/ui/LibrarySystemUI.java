@@ -23,6 +23,42 @@ public class LibrarySystemUI {
             processUserInput();
         } while (isRunning);
     }
+    
+    private String getNonEmptyString(String prompt) {
+        String input;
+        
+        do {
+            System.out.println(prompt);
+            input = scanner.nextLine().trim();
+            
+            if (input.isEmpty()) {
+                System.out.println("Input cannot be empty. Please try again");
+            }
+        } while(input.isEmpty());
+        
+        return input;
+    }
+    
+    private int getPositiveInteger(String prompt) {
+        int parsedInt = -1;
+        
+        while (parsedInt <= 0) {
+            System.out.println(prompt);
+            
+            try {
+               String input = scanner.nextLine().trim();
+               parsedInt = Integer.parseInt(input);
+               
+               if (parsedInt <= 0) {
+                   System.out.println("Invalid input. Please enter a whole number");
+               }
+            }catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a whole number");
+            }
+        }
+        
+        return parsedInt;
+    }
      
     private void showWelcomeMessage() {
         System.out.println("===============================================");
@@ -63,7 +99,7 @@ public class LibrarySystemUI {
                     displayBorrowedBooksOperation();
                     break;
                 case "6":
-                    displayInventory();
+                    displayInventoryOperation();
                     break;
                 case "7":
                     exit();
@@ -74,108 +110,45 @@ public class LibrarySystemUI {
     }
     
     private void addBookOperation() {
-        System.out.print("Please enter the title of the book: ");
-        String title = scanner.nextLine();
+        String title = getNonEmptyString("Please enter the title of the book: ");
+        int copies = getPositiveInteger("Please enter the amount of copies available: ");
         
-        if (title.trim().isEmpty()) { 
-            System.out.println("The title may not be empty");
-            return;
-        }
-        
-        System.out.print("Please enter the amount of copies available: ");
-        String copies = scanner.nextLine();
-        
-        int parsedCopies;
-        try {
-            parsedCopies = Integer.parseInt(copies);
-            
-            if (parsedCopies <= 0) {
-                System.out.println("Invalid copy amount input. Please enter a number greater than 0");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid amount input. Please enter a whole number");
-            return;
-        }
-        
-        system.addBook(title, parsedCopies);
+        system.addBook(title, copies);
         System.out.println("\nBook: " + title + "\n" +
-                "Copies Available: " + parsedCopies + "\n"
+                "Copies Available: " + copies + "\n"
                 + "Has been successfully added to the library");
     }
     
     private void borrowBookOperation() {
-        System.out.print("Please enter the title for the book to be borrowed: ");
-        String title = scanner.nextLine();
-        
-        if (title.trim().isEmpty()) { 
-            System.out.println("The title may not be empty");
-            return;
-        }
-        
-        System.out.print("Please enter the Users ID: ");
-        String userId = scanner.nextLine();
-        
-        if (userId.trim().isEmpty()) { 
-            System.out.println("The Users ID may not be empty");
-            return;
-        }
-        
+        String title = getNonEmptyString("Please enter the title for the book to be borrowed: ");
+        String userId = getNonEmptyString("Please enter the Users ID: ");
         String result = system.borrowBook(title, userId);
         System.out.println("\n" + result);
     }
     
     private void returnBookOperation() {
-        System.out.print("Please enter the User ID that is returning a book: ");
-        String userId = scanner.nextLine();
-        
-        if (userId.trim().isEmpty()) { 
-            System.out.println("The Users ID may not be empty");
-            return;
-        }
-        
-        System.out.print("Please enter the title of the book that they are returning: ");
-        String title = scanner.nextLine();
-        
-        if (title.trim().isEmpty()) { 
-            System.out.println("The title may not be empty");
-            return;
-        }
-        
+        String userId = getNonEmptyString("Please enter the User ID that is returning a book: ");
+        String title = getNonEmptyString("Please enter the title of the book that they are returning: ");
         String result = system.returnBook(userId, title);
         System.out.println("\n" + result);
     }
     
     private void displayBookWaitListOperation() {
-        System.out.print("Enter the title of the book: ");
-        String title = scanner.nextLine();
-        
-        if (title.trim().isEmpty()) {
-            System.out.println("The title may not be empty");
-            return;
-        }
-        
+        String title = getNonEmptyString("Enter the title of the book: ");
         String result = system.displayBookWaitList(title);
-        if (result != null) {
-            System.out.println("\nWaitlist for " + title);
-            System.out.println(result);
-        } 
+        System.out.println("\nWaitlist for " + title + "\n" + result);
     }
     
     private void displayBorrowedBooksOperation() {
         System.out.println("\nDisplaying Borrowed Books: \n");
         String result = system.displayBorrowedBooks();
-        if (result != null) {
-            System.out.println(result);
-        }
+        System.out.println(result);
     }
     
-    private void displayInventory() {
+    private void displayInventoryOperation() {
         System.out.println("\nDisplaying Library Inventory: \n");
         String result = system.displayInventory();
-        if (result != null) {
-            System.out.println(result);
-        }
+        System.out.println(result);
     }
     
     private void exit() {
