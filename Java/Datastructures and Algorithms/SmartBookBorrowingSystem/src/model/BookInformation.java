@@ -3,12 +3,12 @@ package model;
 
 import data.LinkedQueue;
 
-public class BookDetails {
+public class BookInformation {
     
     private int totalCopies, availableCopies;
     private LinkedQueue<String> waitList;
     
-    public BookDetails(int totalCopies) {
+    public BookInformation(int totalCopies) {
         this.totalCopies = totalCopies;
         this.availableCopies = totalCopies;
         this.waitList = new LinkedQueue<>();
@@ -37,10 +37,8 @@ public class BookDetails {
     @Override
     public String toString() {
         return "Available: " + availableCopies
-                + "Total Copies: " + totalCopies
-                + "Waitlist Size: " + waitList.size();
+                + " Total Copies: " + totalCopies
+                + " Waitlist Size: " + waitList.size();
     }
-    
-    
     
 }

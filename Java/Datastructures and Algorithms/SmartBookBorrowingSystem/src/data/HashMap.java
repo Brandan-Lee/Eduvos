@@ -22,6 +22,14 @@ public class HashMap<K, V> {
         return Math.abs(hashCode % buckets.size());
     }
     
+    public int size() {
+        return buckets.size();
+    }
+    
+    public boolean isEmpty() {
+        return buckets.size() == 0;
+    }
+    
     public void put(K key, V value) {
         int bucketIndex = getBucketIndex(key);
         SinglyLinkedList<Entry<K, V>> bucket = buckets.get(bucketIndex);
@@ -50,6 +58,30 @@ public class HashMap<K, V> {
         return null;
     }
     
+    private Iterable<Entry<K, V>> mapEntries() {
+        ArrayList<Entry<K, V>> entries = new ArrayList<>();
+        
+        for (SinglyLinkedList<Entry<K, V>> bucket : buckets) {
+            for (Entry<K, V> entry : bucket) {
+                entries.add(entry);
+            }
+        }
+        
+        return entries;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        
+        for(Entry<K, V> entry : mapEntries()) {
+            sb.append(entry.getKey().toString() + "\n" +
+                    entry.getValue().toString() + "\n");
+        }
+        
+        return sb.toString();
+    }
+    
     private static class Entry<K, V> {
         private K key;
         private V value;
@@ -67,7 +99,7 @@ public class HashMap<K, V> {
             this.key = key;
         }
         
-        public V value() {
+        public V getValue() {
             return value;
         }
         

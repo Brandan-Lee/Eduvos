@@ -29,4 +29,9 @@ public class LinkedQueue<E> {
         return list.removeFirst();
     }
     
+    @Override
+    public String toString() {
+        return list.toString();
+    }
+    
 }

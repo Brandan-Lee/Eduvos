@@ -11,7 +11,8 @@ public class SinglyLinkedList<E> implements Iterable<E> {
     
     public SinglyLinkedList() {
         this.head = null;
-        this.tail = tail;
+        this.tail = null;
+        this.size = 0;
     }
     
     public int size() {
@@ -89,7 +90,7 @@ public class SinglyLinkedList<E> implements Iterable<E> {
         
         Node<E> current = head;
         while (current.getNext() != null) {
-            if (current.getNext().getElement().equals(obj)) {
+            if (current.getElement().equals(obj)) {
                 if (current.getNext() == tail) {
                     tail = current;
                 }
@@ -125,6 +126,35 @@ public class SinglyLinkedList<E> implements Iterable<E> {
                return element;
            }
        };
+    }
+    
+    public boolean contains(E element) {
+        Node<E> current = head;
+        
+        while (current != null) {
+            if (current.getElement().equals(element)) {
+                return true;
+            }
+            
+            current = current.getNext();
+        }
+        
+        return false;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Node<E> current = head;
+        int count = 1;
+        
+        while (current != null) {
+            sb.append(count + ". " + current.getElement() + "\n");
+            count++;
+            current = current.getNext();
+        }
+        
+        return sb.toString();
     }
     
     
