@@ -127,19 +127,19 @@ public class SinglyLinkedList<E> implements Iterable<E> {
     
     /**
      * A helper method to find the previous node
-     * @param obj the node that is search for
-     * @return the node that is before the obj
+     * @param element the node that is search for
+     * @return the node that is before the element
      */
-    private Node<E> findPrevious(Object obj) {
+    private Node<E> findPrevious(E element) {
         //check to see if the sinlgy linked list is empty and if the head element is the searched for object and return null
-        if (isEmpty() ||  head.getElement().equals(obj)) {
+        if (isEmpty() ||  head.getElement().equals(element)) {
             return null;
         }
         
         //Set the current node as the head, loop through the elements until you have finished looping through the whole singly linked list. If the node is found, return the previous node
         Node<E> current = head;
         while (current.getNext() != null) {
-            if (current.getNext().getElement().equals(obj)) {
+            if (current.getNext().getElement().equals(element)) {
                 return current;
             }
             
@@ -160,25 +160,27 @@ public class SinglyLinkedList<E> implements Iterable<E> {
             return false;
         }
         
+        E element = (E) obj;
+        
         //check to see if the head node is the element that needs to be removed
-        if (head.getElement().equals(obj)) {
+        if (head.getElement().equals(element)) {
             removeFirst();
             return true;
         }
         
         //get the previous node
-        Node<E> prev = findPrevious(obj);
+        Node<E> prev = findPrevious(element);
         if (prev == null) {
             return false;
         }
         
         //get the node just before the obj node that needs to be removed, and set it as the tail
-        Node<E> nodeToRemove = findPrevious(obj);
+        Node<E> nodeToRemove = prev.getNext();
+        prev.setNext(nodeToRemove.getNext());
         if (nodeToRemove == tail) {
             tail = prev;
         }
         
-        prev.setNext(nodeToRemove.getNext());
         size--;
         return true;
     }
