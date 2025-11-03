@@ -1,5 +1,10 @@
 package data;
 
+/**
+ * Interface for a generic stack
+ * @author brand
+ * @param <E> 
+ */
 
 public interface Stack<E> {
     

@@ -1,5 +1,8 @@
 package core;
 
+/**
+ * System class for the light weight text editor
+ */
 
 import data.LinkedStack;
 import data.DoublyLinkedList;
@@ -21,13 +24,11 @@ public class TextEditor {
         clipBoardList = new ArrayList<>();
     }
     
-    //Method to insert the text into the textList
+    /**
+     * Method to insert the text into the textList
+     * @param text the text that needs to be inserted
+     */
     public void insertText(String text) {
-        
-        if (text.isEmpty()) {
-            return;
-        }
-        
         String trimmedText = text.trim();
         //Check to see if the user has entered more than one word. If so, add each word as a node to the textList
         String[] words = trimmedText.split("\\s+"); //This regex accounts for one or more white spaces
@@ -44,9 +45,11 @@ public class TextEditor {
         
     }
     
-    //Method that allows a character to be deleted from the textList
+    /**
+     * Method that allows a character to be deleted from the textList
+     * @return if the delete character operation was a success or not
+     */
     public boolean deleteCharacter() {
-        
         if (textList.isEmpty()) {
             return false;
         }
@@ -60,8 +63,6 @@ public class TextEditor {
         
         String deletedChar = lastWord.substring(lastWord.length() - 1);
         String newWord = lastWord.substring(0, lastWord.length() - 1);
-
-        
         undoStack.push(deletedChar);
         
         //Add the new updated word with the deleted character back to the textList
@@ -71,14 +72,15 @@ public class TextEditor {
         
         //displayAllStructures();
         return true;
-        
     }
     
-    //Method that allows the text to be copied to the textList
+    /**
+     * Method that allows the text to be copied to the textList
+     * @param text the text that should be copied
+     */
     public void copy(String text) {
-        
         //Get the current text stored in the textList. Check to see if the text is stored within the textList. If so, add it to the clipboard
-        String currentText = textList.listToString();
+        String currentText = textList.toString();
 
         if (!currentText.contains(text)) { 
             System.out.println("Please select from the current text");
@@ -86,12 +88,14 @@ public class TextEditor {
             clipBoardList.add(text);
             System.out.println("Text copied to clipboard");
         }
-            
     }
     
-    //Method that allows the text to be pasted from the clipboard
+    /**
+     * Method that allows the text to be pasted from the clipboard
+     * @param index the index in from the clipboard that should be pasted
+     * @return true / false
+     */
     public boolean pasteText(int index) {
-        
         int actualIndex = index - 1;
         
         //Ensure that the index is valid for the clipboard
@@ -115,12 +119,13 @@ public class TextEditor {
         clipBoardList.remove(actualIndex);
         //displayAllStructures();
         return true;
-        
     }
     
-    //Method that retreives the elements stored in the clipboardList
+    /**
+     * Method that retreives the elements stored in the clipboardList
+     * @return 
+     */
     public String getClipBoard() {
-        
        if (clipBoardList.isEmpty()) {
            return null;
        }
@@ -133,12 +138,13 @@ public class TextEditor {
        }
        
        return clipBoard;
-       
     }
     
-    // Method that allows the last operation performed to be undone
+    /**
+     * Method that allows the last operation performed to be undone
+     * @return true/false
+     */
     public boolean undo() {
-        
        if (undoStack.isEmpty()) {
            return false;
        }
@@ -172,12 +178,13 @@ public class TextEditor {
        redoStack.push(element);
        // displayAllStructures();
        return true;
-        
     }
     
-    //Method that allows the last operation undone to be redone
+    /**
+     * Method that allows the last operation undone to be redone
+     * @return true/false
+     */
     public boolean redo() {
-        
         if (redoStack.isEmpty()) {
             return false;
         }
@@ -215,12 +222,12 @@ public class TextEditor {
         undoStack.push(elementToRedo);
         // displayAllStructures();
         return true;
-
     }
+    
     
     //Method that returns the textList as a String
     public String getCurrentText() {
-        return textList.listToString();
+        return textList.toString();
     }
     
     //-------From here, these methods were used to help display the functionality of the datastructures
