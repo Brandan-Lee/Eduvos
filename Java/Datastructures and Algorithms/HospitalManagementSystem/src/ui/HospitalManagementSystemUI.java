@@ -226,7 +226,9 @@ public class HospitalManagementSystemUI {
         System.out.println("The current length of the queue is: " + length);
     }
     
-    
+    /**
+     * Exit the system
+     */
     private void exit() {
         isRunning = false;
         System.out.println("\nThank you for using the Hospital Management System. Goodbye");
