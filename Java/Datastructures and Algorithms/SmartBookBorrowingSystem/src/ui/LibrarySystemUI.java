@@ -183,8 +183,7 @@ public class LibrarySystemUI {
      */
     private void displayBookWaitListOperation() {
         String title = getNonEmptyString("Enter the title of the book: ");
-        String result = system.displayBookWaitList(title);
-        System.out.println("\nWaitlist for " + title + "\n" + result);
+        system.displayBookWaitList(title);
     }
     
     /**
@@ -192,8 +191,7 @@ public class LibrarySystemUI {
      */
     private void displayBorrowedBooksOperation() {
         System.out.println("\nDisplaying Borrowed Books: \n");
-        String result = system.displayBorrowedBooks();
-        System.out.println(result);
+        system.displayBorrowedBooks();
     }
     
     /**
@@ -201,8 +199,7 @@ public class LibrarySystemUI {
      */
     private void displayInventoryOperation() {
         System.out.println("\nDisplaying Library Inventory: \n");
-        String result = system.displayInventory();
-        System.out.println(result);
+        system.displayInventory();
     }
     
     /**

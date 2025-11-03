@@ -140,51 +140,47 @@ public class LibrarySystem {
     /**
      * Display the wait list for the book
      * @param title the title of the book whose wait list you want to retrieve
-     * @return the wait list for that specific book as a string
      */
-    public String displayBookWaitList(String title) {
+    public void displayBookWaitList(String title) {
         BookInformation details = getBookDetails(title);
         
         //check to see if there are any book title storied in the libraries inventory
         if (details == null) {
-            return "Book " + title + " is not in the library inventory";
+            System.out.println("Book " + title + " is not in the library inventory");
         }
         
         //check to see if there is a wait list for that book
         if (details.getWaitList().isEmpty()) {
-            return "There is no waitlist for " + title;
+            System.out.println("There is no waitlist for " + title);
         }
         
         //there is a wait list for the book, display it to the user
-        return details.getWaitList().toString();
+        System.out.println(details.getWaitList().toString());
     }
     
     /**
      * Display the books that the library has borrowed
-     * @return the books that the library has borrowed as a string
      */
-    public String displayBorrowedBooks() {
+    public void displayBorrowedBooks() {
         //check to see if a book has been borrowed from the library
         if (booksBorrowed.isEmpty()) {
-            return "No books have been borrowed to any user";
+            System.out.println("No books have been borrowed to any user");
         }
         
         //books has been borrowed, display the hashmap
-        return booksBorrowed.toString();
+        System.out.println(booksBorrowed.toString());
     }
     
     /**
      * Display the books in the library
-     * @return the inventory of the library
      */
-    public String displayInventory() {
+    public void displayInventory() {
         //check to see if books has been added to the library
         if (library.isEmpty()) {
-            return "The library is empty";
+            System.out.println("The library is empty");
         }
         
         //books have been added, display the hashmap.
-        return library.toString();
+        System.out.println(library.toString());
     }
-    
 }
