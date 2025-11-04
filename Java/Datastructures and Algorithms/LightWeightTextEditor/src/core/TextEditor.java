@@ -41,7 +41,7 @@ public class TextEditor {
         
         //Push the text entered by the user to the top of the stack
         undoStack.push(trimmedText);
-        //displayAllStructures();
+        displayAllStructures();
         
     }
     
@@ -70,7 +70,7 @@ public class TextEditor {
             textList.addLast(newWord);
         }
         
-        //displayAllStructures();
+        displayAllStructures();
         return true;
     }
     
@@ -117,7 +117,7 @@ public class TextEditor {
         //Push the text entered by the user to the top of the stack and remove from the clipboard
         undoStack.push(textToPaste);
         clipBoardList.remove(actualIndex);
-        //displayAllStructures();
+        displayAllStructures();
         return true;
     }
     
@@ -176,7 +176,7 @@ public class TextEditor {
        
        //Add the element that was undone to the top of the redoStack
        redoStack.push(element);
-       // displayAllStructures();
+       displayAllStructures();
        return true;
     }
     
@@ -220,7 +220,7 @@ public class TextEditor {
         
         //Add the element that was redone to the top of the redoStack
         undoStack.push(elementToRedo);
-        // displayAllStructures();
+        displayAllStructures();
         return true;
     }
     
@@ -232,98 +232,98 @@ public class TextEditor {
     
     //-------From here, these methods were used to help display the functionality of the datastructures
     
-//    //helper method to display the contents of the undo Stack
-//    private void displayUndoStack() {
-//        System.out.println("=== UNDO STACK ===");
-//        if (undoStack.isEmpty()) {
-//            System.out.println("Undo stack is empty");
-//        } else {
-//            System.out.println("Undo stack contents (top to bottom):");
-//            displayStackContents(undoStack);
-//        }
-//        System.out.println();
-//    }
+    //helper method to display the contents of the undo Stack
+    private void displayUndoStack() {
+        System.out.println("=== UNDO STACK ===");
+        if (undoStack.isEmpty()) {
+            System.out.println("Undo stack is empty");
+       } else {
+            System.out.println("Undo stack contents (top to bottom):");
+            displayStackContents(undoStack);
+        }
+        System.out.println();
+    }
 //
 //    // helper method to display the contents of the redo stack
-//    private void displayRedoStack() {
-//        System.out.println("=== REDO STACK ===");
-//        if (redoStack.isEmpty()) {
-//            System.out.println("Redo stack is empty");
-//        } else {
-//            System.out.println("Redo stack contents (top to bottom):");
-//            displayStackContents(redoStack);
-//        }
-//        System.out.println();
-//    }
+    private void displayRedoStack() {
+        System.out.println("=== REDO STACK ===");
+        if (redoStack.isEmpty()) {
+            System.out.println("Redo stack is empty");
+        } else {
+            System.out.println("Redo stack contents (top to bottom):");
+            displayStackContents(redoStack);
+        }
+        System.out.println();
+    }
 //    
 //    //helper method to display the contents of the stack given in the parameter
-//    private void displayStackContents(LinkedStack<String> stack) {
-//        if (stack.isEmpty()) {
-//            System.out.println("Stack is empty");
-//            return;
-//        }
-//
-//        // Create a temporary stack to preserve the original order
-//        LinkedStack<String> tempStack = new LinkedStack<>();
-//        int count = 1;
-//
-//        System.out.println("Stack (most recent first):");
-//        while (!stack.isEmpty()) {
-//            String element = stack.pop();
-//            System.out.println(count++ + ": " + element);
-//            tempStack.push(element);
-//        }
-//
-//        // Restore the original stack
-//        while (!tempStack.isEmpty()) {
-//            stack.push(tempStack.pop());
-//        }
-//    }
+    private void displayStackContents(LinkedStack<String> stack) {
+        if (stack.isEmpty()) {
+            System.out.println("Stack is empty");
+            return;
+        }
+
+        // Create a temporary stack to preserve the original order
+        LinkedStack<String> tempStack = new LinkedStack<>();
+        int count = 1;
+
+        System.out.println("Stack (most recent first):");
+        while (!stack.isEmpty()) {
+            String element = stack.pop();
+            System.out.println(count++ + ": " + element);
+           tempStack.push(element);
+        }
+
+        // Restore the original stack
+        while (!tempStack.isEmpty()) {
+            stack.push(tempStack.pop());
+        }
+    }
 //
 //    // helper method to display the contents of the text list (doubly linked list)
-//    private void displayTextList() {
-//        System.out.println("=== TEXT LIST (DoublyLinkedList) ===");
-//        if (textList.isEmpty()) {
-//            System.out.println("Text list is empty");
-//        } else {
-//            System.out.println("Text list contents (first to last):");
-//            displayListContents();
-//        }
-//        System.out.println();
-//    }
+    private void displayTextList() {
+        System.out.println("=== TEXT LIST (DoublyLinkedList) ===");
+        if (textList.isEmpty()) {
+            System.out.println("Text list is empty");
+       } else {
+            System.out.println("Text list contents (first to last):");
+            displayListContents();
+        }
+        System.out.println();
+    }
 //
 //    // Helper method to display list contents
-//    private void displayListContents() {
-//        if (textList.isEmpty()) {
-//            System.out.println("List is empty");
-//            return;
-//        }
-//
+    private void displayListContents() {
+        if (textList.isEmpty()) {
+            System.out.println("List is empty");
+            return;
+        }
+
 //        // Create a temporary list to preserve original list
-//        DoublyLinkedList<String> tempList = new DoublyLinkedList<>();
-//        int position = 1;
+        DoublyLinkedList<String> tempList = new DoublyLinkedList<>();
+        int position = 1;
 //
 //        // Remove all elements and display them
-//        while (!textList.isEmpty()) {
-//            String element = textList.removeFirst();
-//            System.out.println(position + ". \"" + element + "\"");
-//            tempList.addLast(element);
-//            position++;
-//        }
-//
-//        // Restore the original list
-//        while (!tempList.isEmpty()) {
-//            textList.addLast(tempList.removeFirst());
-//        }
-//    }
-//
+        while (!textList.isEmpty()) {
+            String element = textList.removeFirst();
+            System.out.println(position + ". \"" + element + "\"");
+            tempList.addLast(element);
+            position++;
+        }
+
+        // Restore the original list
+        while (!tempList.isEmpty()) {
+            textList.addLast(tempList.removeFirst());
+        }
+    }
+
 //    // Method that helps to display the datastructures after each operation
-//    public void displayAllStructures() {
-//        System.out.println("=====================================");
-//        displayTextList();
-//        displayUndoStack();
-//        displayRedoStack();
-//        System.out.println("=====================================");
-//    }
+    public void displayAllStructures() {
+        System.out.println("=====================================");
+        displayTextList();
+        displayUndoStack();
+        displayRedoStack();
+        System.out.println("=====================================");
+    }
 //    
 }
