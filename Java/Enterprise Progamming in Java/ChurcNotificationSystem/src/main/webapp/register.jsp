@@ -15,10 +15,10 @@
                 City Church Notification System
             </h1>
             <h2 class="subtitle">
-                Login to the Notification System
+                Register to receive your latest church notifications
             </h2>
 
-            <form class="frm-styles" action="LoginServlet">
+            <form class="frm-styles" action="RegistrationServlet" method="POST">
                 <!--Username group-->
                 <div class="frm-group">
                     <label for="username" class="lbl">
@@ -43,14 +43,32 @@
                     />
                 </div>
                 
+                <!--Role select as a database will not be included within this project-->
+                <div class="frm-group">
+                    <label for="user-role" class="lbl">
+                        Please select your role
+                    </label>
+                    <select id="user-role" name="role" class="input-field">
+                        <option value="" disabled selected>
+                            Select your role
+                        </option>
+                        <option value="leader">
+                            Church Leader
+                        </option>
+                        <option value="member">
+                            Church Member
+                        </option>
+                    </select>
+                </div>
+                
                 <!--Bottom buttons-->
                 <div class="btn-group">
                     <input type="submit" 
-                           value="LOGIN" 
+                           value="REGISTER" 
                            class="btn" />
                     
-                    <!-- Navigation button to registration page -->
-                    <a href="register.jsp" class="btn" style="text-align: center; line-height: normal;">REGISTER</a>
+                    <!-- Navigation button to login page -->
+                    <a href="login.jsp" class="btn" style="text-align: center; line-height: normal;">BACK TO LOGIN</a>
                 </div>
             <form>
         </section>
