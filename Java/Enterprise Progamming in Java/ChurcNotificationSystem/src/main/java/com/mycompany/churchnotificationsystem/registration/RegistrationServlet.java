@@ -1,84 +1,67 @@
-
 package com.mycompany.churchnotificationsystem.registration;
 
+import com.mycompany.churchnotificationsystem.datastore.UserDataStore;
+import com.mycompany.churchnotificationsystem.validation.ValidationUtil;
+import com.mycompany.churchnotificationsystem.model.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author brand
- */
-@WebServlet(name = "RegistrationServlet", urlPatterns = {"/RegistrationServlet"})
+@WebServlet("/RegistrationServlet")
 public class RegistrationServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RegistrationServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RegistrationServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+    private final ValidationUtil validator = new ValidationUtil();
+    private final UserDataStore data = new UserDataStore();
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        //Retrieve the username, password and role from the client and sanitize it
+        String userName = validator.sanitizeUserInput(request.getParameter("username"));
+        String password = validator.sanitizeUserInput(request.getParameter("password"));
+        String role = validator.sanitizeUserInput(request.getParameter("role"));
+
+        //Validation checks
+        if (validator.isEmpty(userName)) {
+            request.setAttribute("errorField", "username");
+            validator.forwardWithFeedback(request, response, "register.jsp", "errorMessage", "The username field is empty");
+            return;
+        }
+
+        if (validator.isEmpty(password)) {
+            request.setAttribute("errorField", "password");
+            validator.forwardWithFeedback(request, response, "register.jsp", "errorMessage", "The password field is empty");
+            return;
+        }
+
+        if (validator.isEmpty(role) || role.equalsIgnoreCase("Select a role")) {
+            request.setAttribute("errorField", "role");
+            validator.forwardWithFeedback(request, response, "register.jsp", "errorMessage", "Please select a role");
+            return;
+        }
+
+        //Check to see if the user has registered to the notification system already
+        if (data.userNameExists(userName)) {
+            request.setAttribute("errorField", "username");
+            validator.forwardWithFeedback(request, response, "register.jsp", "errorMessage", "User " + userName + " already exists on this system");
+            return;
+        }
+
+        //Store the user and send them a message that regisration was successfull
+        User user = new User(userName, password, role);
+        data.saveUser(user);
+        validator.forwardWithFeedback(request, response, "register.jsp", "success", "User " + userName + " has been successfully registered on the system. Please return to the login page");
+
+    }
 
 }

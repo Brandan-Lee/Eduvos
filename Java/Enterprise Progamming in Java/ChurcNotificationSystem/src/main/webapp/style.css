@@ -47,6 +47,29 @@ body {
     margin-bottom: 1.5em;
 }
 
+.msg-banner {
+    padding: 0.65em 1em;
+    border-radius: 8px;
+    margin-bottom: 1.2em;
+    width: 75%;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.80);
+}
+
+.msg-error {
+    color: #A94442;
+    background-color: #F2DEDE;
+    border: 1px solid #EBCCD1;
+}
+
+.msg-success {
+    color: #3C763D;
+    background-color: #DFF0D8;
+    border: 1px solid #D6E9C6;
+}
+
 .frm-styles {
     width: 75%;
     border: 1px solid lightskyblue;
@@ -84,24 +107,29 @@ body {
     background-color: white;
     box-shadow: 0 1px 3px rgba(135, 206, 250, 1);
     cursor: pointer;
-    -webkit-appearance: none;
+/*    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%2387CEFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
     background-repeat: no-repeat;
     background-position: right 1em center;
-    background-size: 1em;
+    background-size: 1em;*/
+}
+
+.input-field::placeholder {
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.input-field.input-error {
+    border: 2px solid #D9534F !important;
+    background-color: #FFF0F0;
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.4);
 }
 
 select.input-field option {
     background-color: white;
     color: black;
     padding: 0.5em;
-}
-
-
-.input-field::placeholder {
-    color: rgba(0, 0, 0, 0.3);
 }
 
 .btn-group {
