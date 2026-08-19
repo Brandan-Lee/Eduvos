@@ -10,7 +10,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("ChurchNotificationSystemServer")
+@ServerEndpoint("/ChurchNotificationSystemServer")
 public class ChurchNotificationSystemWebSocket {
     
     private static final Set<Session> sessions = new CopyOnWriteArraySet<>();
