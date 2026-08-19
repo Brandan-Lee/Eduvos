@@ -60,7 +60,7 @@ public class RegistrationServlet extends HttpServlet {
         //Store the user and send them a message that regisration was successfull
         User user = new User(userName, password, role);
         data.saveUser(user);
-        validator.forwardWithFeedback(request, response, "register.jsp", "success", "User " + userName + " has been successfully registered on the system. Please return to the login page");
+        validator.forwardWithFeedback(request, response, "register.jsp", "success", "User " + userName + " has been successfully registered on the system.");
 
     }
 

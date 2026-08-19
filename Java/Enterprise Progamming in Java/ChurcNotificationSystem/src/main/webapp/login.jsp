@@ -5,7 +5,7 @@
         <title>City Church Notification System</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" type="text/css" href="style.css" />
-    <head>
+    </head>
     <body>
         <!-- Top bar that will be used across the pages -->
         <div class="top-bar"></div>
@@ -17,17 +17,39 @@
             <h2 class="subtitle">
                 Login to the Notification System
             </h2>
+            
+            <!--Retrieve from the server if there was a problem with the login process and highlight that field or if it was successful-->
+            <%
+                String error = (String) request.getAttribute("errorMessage");
+                String success = (String) request.getAttribute("success");
+                String errorField = (String) request.getAttribute("errorField");
 
-            <form class="frm-styles" action="LoginServlet">
+                if (error != null) {
+            %>
+
+            <div class="msg-banner msg-error">
+                <%= error%>
+            </div>
+            <% } else if (success != null) {%>
+            <div class="msg-banner msg-success">
+                <%= success%> Redirecting to home page in 2 seconds...
+            </div>
+            <% }%>
+
+            <form class="frm-styles"
+                  action="LoginServlet"
+                  method="POST"
+            >
                 <!--Username group-->
                 <div class="frm-group">
                     <label for="username" class="lbl">
                         Please enter your username
                     </label>
                     <input type="text" 
-                           class="input-field" 
+                           class="input-field <%= "username".equals(errorField) ? "input-error" : ""%>" 
                            name="username" 
-                           placeholder="Username" 
+                           placeholder="Username"
+                           value="<%= request.getParameter("username") != null ? request.getParameter("username") : ""%>"
                     />
                 </div>
                 
@@ -37,9 +59,10 @@
                         Please enter your password
                     </label>
                     <input type="password" 
-                           class="input-field" 
+                           class="input-field <%= "password".equals(errorField) ? "input-error" : ""%>" 
                            name="password" 
-                           placeholder="Password" 
+                           placeholder="Password"
+                           value="<%= request.getParameter("password") != null ? request.getParameter("password") : ""%>"
                     />
                 </div>
                 
@@ -52,7 +75,15 @@
                     <!-- Navigation button to registration page -->
                     <a href="register.jsp" class="btn" style="text-align: center; line-height: normal;">REGISTER</a>
                 </div>
-            <form>
+            </form>
         </section>
+        <!--On successful login, the user will be redirected to the home page automatically-->
+        <% if (request.getAttribute("success") != null) { %>
+            <script>
+                setTimeout(function () {
+                    window.location.href = "home.jsp";
+                }, 2000);
+            </script>
+        <% }%>
     </body>
 </html>
