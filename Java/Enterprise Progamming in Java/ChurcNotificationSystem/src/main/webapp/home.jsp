@@ -2,10 +2,39 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>City Church Notification System</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" type="text/css" href="style.css" />
     </head>
     <body>
-        <h1>This is the home page</h1>
+        <!-- Top bar that will be used across the pages -->
+        <div class="top-bar"></div>
+
+        <section class="container">
+            <h1 class="title">
+                City Church Notification System
+            </h1>
+            
+            <%
+                com.mycompany.churchnotificationsystem.model.User user = (com.mycompany.churchnotificationsystem.model.User)session.getAttribute("currentUser");
+                String role = (String) session.getAttribute("userRole");
+            %>
+            
+            <h2 class="subtitle">
+                Welcome back Church <%= role + " " + user.getUserName() %>. This is your home dashboard
+            </h2>
+            
+            <!--Home buttons-->
+            <div class="btn-group">
+                <!-- Navigation button to registration page -->
+                <a href="viewNotifications.jsp" class="btn" style="text-align: center; line-height: normal;">VIEW NOTIFICATIONS</a>
+                    
+                <% if (user.getRole().equals("leader")) { %>
+                    <!-- Navigation button to registration page -->
+                    <a href="viewNotifications.jsp" class="btn" style="text-align: center; line-height: normal;">SEND A NEW NOTIFICATION</a>
+                <% } %>
+            </div>
+
+        </section>
     </body>
 </html>
