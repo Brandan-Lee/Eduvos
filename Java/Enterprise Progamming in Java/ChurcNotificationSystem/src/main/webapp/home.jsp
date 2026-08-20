@@ -27,11 +27,11 @@
             <!--Home buttons-->
             <div class="btn-group">
                 <!-- Navigation button to registration page -->
-                <a href="viewNotifications.jsp" class="btn" style="text-align: center; line-height: normal;">VIEW NOTIFICATIONS</a>
+                <a href="view-notification.jsp" class="btn" style="text-align: center; line-height: normal;">VIEW NOTIFICATIONS</a>
                     
                 <% if (user.getRole().equals("leader")) { %>
-                    <!-- Navigation button to registration page -->
-                    <a href="viewNotifications.jsp" class="btn" style="text-align: center; line-height: normal;">SEND A NEW NOTIFICATION</a>
+                    <!-- Navigation button to navigation page -->
+                    <a href="notification.jsp" class="btn" style="text-align: center; line-height: normal;">SEND A NEW NOTIFICATION</a>
                 <% } %>
             </div>
 

@@ -20,22 +20,26 @@ public class SendNotificationServlet extends HttpServlet {
 
     @Inject
     private JMSContext jms;
-    
+
     private final ValidationUtil validator = new ValidationUtil();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String notification = validator.sanitizeUserInput(request.getParameter("notification"));
-        
+        request.getRequestDispatcher("notification.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String notification = request.getParameter("notification");
+
         if (validator.isEmpty(notification)) {
             request.setAttribute("errorField", "notification");
             validator.forwardWithFeedback(request, response, "notification.jsp", "errorMessage", "The notification field is empty");
             return;
         }
-        
-        jms.createProducer().send(notificationQueue, "notification");
+
+        jms.createProducer().send(notificationQueue, notification.trim());
         validator.forwardWithFeedback(request, response, "notification.jsp", "success", "Notification has been successfully sent to the system");
-
     }
-
 }
