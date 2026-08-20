@@ -44,7 +44,7 @@
                               class="input-field <%= "notification".equals(errorField) ? "input-error" : ""%>"
                               name="notification"
                               rows="5"
-                              placeholder="Please enter a notification to send..."><%= request.getParameter("notification") != null ? request.getParameter("notification") : "" %></textarea>
+                              placeholder="Please enter a notification to send..."><%= request.getParameter("notification") != null ? request.getParameter("notification") : ""%></textarea>
                 </div>
 
                 <!--Bottom buttons-->
@@ -56,5 +56,17 @@
                 </div>
             </form>
         </section>
+                
+        <!--On successful submission, clear the notification textarea input-->
+        <% if (request.getAttribute("success") != null) { %>
+        <script>
+            const notificationField = document.getElementById("notification");
+
+            if (notificationField) {
+                notificationField.value = "";
+            }
+        </script>
+        <% }%>
+        
     </body>
 </html>

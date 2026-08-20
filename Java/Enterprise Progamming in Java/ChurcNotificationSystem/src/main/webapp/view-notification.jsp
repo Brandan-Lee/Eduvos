@@ -57,9 +57,7 @@
                         }
 
                         const notificationAlert = document.createElement("div");
-                        notificationAlert.className = "msg-banner";
-                        notificationAlert.style.marginBottom = "1em";
-                        notificationAlert.style.textAlign = "left";
+                        notificationAlert.className = "notification-card";
                         notificationAlert.textContent = notification;
                         notificationFeed.prepend(notificationAlert);
                     }
@@ -69,7 +67,6 @@
                     console.log("The connection to the server has been closed");
                 };
             }
-            ;
 
             connect();
         </script>

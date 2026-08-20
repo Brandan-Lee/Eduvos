@@ -40,6 +40,6 @@ public class SendNotificationServlet extends HttpServlet {
         }
 
         jms.createProducer().send(notificationQueue, notification.trim());
-        validator.forwardWithFeedback(request, response, "notification.jsp", "success", "Notification has been successfully sent to the system");
+        validator.forwardWithFeedback(request, response, "notification.jsp", "success", "Notification has been successfully sent to the system. Send another notification or return back to your home dashboard");
     }
 }
