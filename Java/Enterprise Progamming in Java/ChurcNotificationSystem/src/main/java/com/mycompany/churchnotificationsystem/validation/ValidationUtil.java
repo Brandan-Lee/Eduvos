@@ -44,6 +44,7 @@ public class ValidationUtil {
         return ValidationResult.success();
     }
     
+    //Method to help with validation logic within Registration Servlet
     public ValidationResult validateRegistration(String username, String password, String role) {
         //Ensure that the users credential data is present
         ValidationResult presenceCheck = validateCredentialsPresence(username, password);
@@ -65,6 +66,7 @@ public class ValidationUtil {
         return ValidationResult.success();
     }
     
+    //Method to help with validation logic within LoginServlet
     public ValidationResult validateLogin(String username, String password) {
         //Ensure that the users credential data is present
         ValidationResult presenceCheck = validateCredentialsPresence(username, password);
@@ -83,6 +85,7 @@ public class ValidationUtil {
         return ValidationResult.success();
     }
     
+    //Method to help with validation logic within SendNotificationServlet
     public ValidationResult validateNotification(String notification) {
         //Ensure that the user entered texts within the notification input field
         if (isEmpty(notification)) {

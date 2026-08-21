@@ -57,6 +57,7 @@ public class NotificationProcessorMDB implements MessageListener {
     //Helper method that ensures that the notification can be broadcasted via the websocket
     private void dispatchNotification(String notification) {
         try {
+            //Ensure that an instance of the manager exists
             if (manager != null) {
                 manager.broadCast(notification);
             } else {

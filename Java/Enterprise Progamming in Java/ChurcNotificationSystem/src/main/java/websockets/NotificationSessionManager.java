@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.websocket.Session;
 
+//Helper class to help the websocket manage user sesssions
 public class NotificationSessionManager {
     
     private static final Logger logger = Logger.getLogger(NotificationSessionManager.class.getName());
