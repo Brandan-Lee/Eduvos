@@ -1,5 +1,6 @@
 package com.mycompany.churchnotificationsystem.JMS;
 
+import com.mycompany.churchnotificationsystem.validation.ValidationResult;
 import com.mycompany.churchnotificationsystem.validation.ValidationUtil;
 import java.io.IOException;
 import javax.annotation.Resource;
@@ -20,26 +21,34 @@ public class SendNotificationServlet extends HttpServlet {
 
     @Inject
     private JMSContext jms;
-
-    private final ValidationUtil validator = new ValidationUtil();
-
+    
+    @Inject
+    private ValidationUtil validator;
+    
+    private static final String VIEW_PAGE = "notifications.jsp";
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("notification.jsp").forward(request, response);
+        request.getRequestDispatcher(VIEW_PAGE).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String notification = request.getParameter("notification");
-
-        if (validator.isEmpty(notification)) {
-            request.setAttribute("errorField", "notification");
-            validator.forwardWithFeedback(request, response, "notification.jsp", "errorMessage", "The notification field is empty");
+        //Retrieve the notification from the client and sanitize it.
+        String notification = validator.sanitizeUserInput(request.getParameter("notification"));
+        
+        //Validation check for notification user input using the ValidationResult helper class and validation util.
+        ValidationResult result = validator.validateNotification(notification);
+        
+        if (!result.isValid()) {
+            request.setAttribute("errorField", result.getErrorField());
+            validator.forwardWithFeedback(request, response, VIEW_PAGE, "errorMessage", result.getErrorMessage());
             return;
         }
-
+        
+        //Send the notification to the notificationqueue so that the websocket can display the notification.
         jms.createProducer().send(notificationQueue, notification.trim());
-        validator.forwardWithFeedback(request, response, "notification.jsp", "success", "Notification has been successfully sent to the system. Send another notification or return back to your home dashboard");
+            validator.forwardWithFeedback(request, response, VIEW_PAGE, "success", "Notification has been successfully sent to the system. Send another notification or return back to your home dashboard");
     }
+    
 }

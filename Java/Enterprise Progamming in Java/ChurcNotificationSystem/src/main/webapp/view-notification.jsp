@@ -22,7 +22,7 @@
                 There are no new notifications at this time. Please try again later.
             </div>
 
-            <a href="home.jsp" class="btn" style="text-align: center; line-height: normal;">BACK TO HOME DASHBOARD</a>
+            <a href="<%= request.getContextPath() %>/home.jsp" class="btn" style="text-align: center; line-height: normal;">BACK TO HOME DASHBOARD</a>
 
         </section>
 
