@@ -16,6 +16,7 @@ public class ValidationUtil {
     @Inject
     private UserDataStore data;
     
+    //Method that ensures that user input has been sanitised and is not empty.
     public String sanitizeUserInput(String input) {
         if (input != null) {
             return input.trim();
@@ -24,12 +25,14 @@ public class ValidationUtil {
         return "";
     }
     
-    public boolean isEmpty(String input) {
+    //Helper method to check if the user input is empty
+    private boolean isEmpty(String input) {
         return input == null || input.trim().isEmpty();
     }
     
     //Helper method to ensure that the user has entered their credentials into client input fields
     private ValidationResult validateCredentialsPresence(String username, String password) {
+        //Validate username and password input
         if (isEmpty(username)) {
             return ValidationResult.fail("username", "The username field is empty");
         }
@@ -89,6 +92,7 @@ public class ValidationUtil {
         return ValidationResult.success();
     }
     
+    //Method that helps with forwarding server responses to the client.
     public void forwardWithFeedback(HttpServletRequest request, HttpServletResponse response, String viewName, String attributeName, String message) throws ServletException, IOException {
         request.setAttribute(attributeName, message);
         request.getRequestDispatcher(viewName).forward(request, response);

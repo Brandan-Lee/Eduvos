@@ -1,16 +1,18 @@
 
 package com.mycompany.churchnotificationsystem.JMS;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.inject.Inject;
 import javax.jms.JMSConnectionFactoryDefinition;
 import javax.jms.JMSDestinationDefinition;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-import websockets.ChurchNotificationSystemWebSocket;
+import websockets.NotificationSessionManager;
 
 @JMSConnectionFactoryDefinition (
         name = "java:global/jms/ChurchNotificationSystemConnectionFactory",
@@ -29,6 +31,9 @@ import websockets.ChurchNotificationSystemWebSocket;
 public class NotificationProcessorMDB implements MessageListener {
     
     private static final Logger logger = Logger.getLogger(NotificationProcessorMDB.class.getName());
+    
+    @Inject
+    private NotificationSessionManager manager;
 
     @Override
     public void onMessage(Message message) {
@@ -42,17 +47,21 @@ public class NotificationProcessorMDB implements MessageListener {
         try {
             TextMessage txt = (TextMessage) message;
             String notificationText = txt.getText();
-            logger.info("Incoming notification is being processed: " + notificationText);
+            logger.log(Level.INFO, "Incoming notification is being processed: {0}", notificationText);
             dispatchNotification(notificationText);
         } catch (JMSException ex) {
-            logger.severe("Failed to read incoming JMS notification: " + ex.getMessage());
+            logger.log(Level.SEVERE, "Failed to read incoming JMS notification: {0}", ex.getMessage());
         }
     }
     
     //Helper method that ensures that the notification can be broadcasted via the websocket
     private void dispatchNotification(String notification) {
         try {
-            ChurchNotificationSystemWebSocket.broadcastMessage(notification);
+            if (manager != null) {
+                manager.broadCast(notification);
+            } else {
+                logger.severe("Notification session manager has not been found");
+            }
         } catch (Exception ex) {
             logger.severe("There was a problem broadcasting the notification from the websocket");
         }

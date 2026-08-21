@@ -36,8 +36,6 @@
             </div>
             <% }%>
             
-            <%-- TEMPORARY DEBUG LINE --%>
-<p style="color: red; text-align: center;">Debug errorField: '[<%= errorField %>]'</p>
             <form class="frm-styles"
                   action="LoginServlet"
                   method="POST"

@@ -6,7 +6,7 @@ public class ValidationResult {
     private final boolean valid;
     private final String errorField;
     private final String errorMessage;
-
+    
     public ValidationResult(boolean valid, String errorField, String errorMessage) {
         this.valid = valid;
         this.errorField = errorField;
