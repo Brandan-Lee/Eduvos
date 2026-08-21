@@ -25,7 +25,7 @@ public class SendNotificationServlet extends HttpServlet {
     @Inject
     private ValidationUtil validator;
     
-    private static final String VIEW_PAGE = "notifications.jsp";
+    private static final String VIEW_PAGE = "notification.jsp";
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

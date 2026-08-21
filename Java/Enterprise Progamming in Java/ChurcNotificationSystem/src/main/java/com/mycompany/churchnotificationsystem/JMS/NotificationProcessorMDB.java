@@ -13,7 +13,7 @@ import javax.jms.TextMessage;
 import websockets.ChurchNotificationSystemWebSocket;
 
 @JMSConnectionFactoryDefinition (
-        name = "java:global/jms/CurchNotificationSystemConnectionFactory",
+        name = "java:global/jms/ChurchNotificationSystemConnectionFactory",
         interfaceName = "javax.jms.ConnectionFactory"
 )
 @JMSDestinationDefinition (
@@ -32,14 +32,29 @@ public class NotificationProcessorMDB implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
+        //Validate the type of the message
+        if (!(message instanceof TextMessage)) {
+            logger.warning("The message received is not of type text message");
+            return;
+        }
+        
+        //Process the incoming message and display on the client
         try {
-            if (message instanceof TextMessage) {
-                String notificationText = ((TextMessage) message).getText();
-                logger.info("NotificationQueue received order asynchronously: " + notificationText);
-                ChurchNotificationSystemWebSocket.broadcastMessage(notificationText);
-            }
+            TextMessage txt = (TextMessage) message;
+            String notificationText = txt.getText();
+            logger.info("Incoming notification is being processed: " + notificationText);
+            dispatchNotification(notificationText);
         } catch (JMSException ex) {
-            logger.severe("Error processing JMS notification: " + ex.getMessage());
+            logger.severe("Failed to read incoming JMS notification: " + ex.getMessage());
+        }
+    }
+    
+    //Helper method that ensures that the notification can be broadcasted via the websocket
+    private void dispatchNotification(String notification) {
+        try {
+            ChurchNotificationSystemWebSocket.broadcastMessage(notification);
+        } catch (Exception ex) {
+            logger.severe("There was a problem broadcasting the notification from the websocket");
         }
     }
     

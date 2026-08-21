@@ -35,7 +35,9 @@
                 <%= success%> Redirecting to home page in 2 seconds...
             </div>
             <% }%>
-
+            
+            <%-- TEMPORARY DEBUG LINE --%>
+<p style="color: red; text-align: center;">Debug errorField: '[<%= errorField %>]'</p>
             <form class="frm-styles"
                   action="LoginServlet"
                   method="POST"
@@ -46,7 +48,7 @@
                         Please enter your username
                     </label>
                     <input type="text" 
-                           class="input-field <%= "username".equals(errorField) ? "input-error" : ""%>" 
+                           class="input-field <%= ("login".equals(errorField) || "username".equals(errorField)) ? "input-error" : ""%>" 
                            name="username" 
                            placeholder="Username"
                            value="<%= request.getParameter("username") != null ? request.getParameter("username") : ""%>"
@@ -59,7 +61,7 @@
                         Please enter your password
                     </label>
                     <input type="password" 
-                           class="input-field <%= "password".equals(errorField) ? "input-error" : ""%>" 
+                           class="input-field <%= ("login".equals(errorField) || "password".equals(errorField)) ? "input-error" : ""%>" 
                            name="password" 
                            placeholder="Password"
                            value="<%= request.getParameter("password") != null ? request.getParameter("password") : ""%>"
