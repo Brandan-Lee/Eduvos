@@ -84,7 +84,7 @@
                     console.log("The connection to the server has been closed");
                 };
                 
-                websocket.onerror = function (error) {
+                webSocket.onerror = function (error) {
                     console.error("An error occurred within the websocket: ", error);
                 };
             }

@@ -9,7 +9,7 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/ChurchNotificationSystemServer")
 public class ChurchNotificationSystemWebSocket {
-
+    
     @OnOpen
     public void onOpen(Session session) {
         NotificationSessionManager.addSession(session);
