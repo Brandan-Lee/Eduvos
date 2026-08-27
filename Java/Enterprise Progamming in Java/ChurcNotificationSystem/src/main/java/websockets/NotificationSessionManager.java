@@ -27,7 +27,7 @@ public class NotificationSessionManager {
     }
     
     //Method to broadcast notifications to all sessions that are open by the notification manager
-    public static void broadCast(String message) {
+    public static void broadCastMessage(String message) {
         for (Session s : sessions) {
             sendMessage(s, message);
         }

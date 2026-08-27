@@ -59,7 +59,7 @@ public class NotificationProcessorMDB implements MessageListener {
         try {
             //Ensure that an instance of the manager exists
             if (manager != null) {
-                manager.broadCast(notification);
+                manager.broadCastMessage(notification);
                 logger.log(Level.INFO, "Notification has been sent successfully: {0}", notification);
             } else {
                 logger.severe("Notification session manager has not been found");

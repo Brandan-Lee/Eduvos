@@ -22,7 +22,7 @@ public class ChurchNotificationSystemWebSocket {
 
     @OnMessage
     public static void onMessage(String message, Session session) {
-        NotificationSessionManager.broadCast(message);
+        NotificationSessionManager.broadCastMessage(message);
     }
 
     @OnError
